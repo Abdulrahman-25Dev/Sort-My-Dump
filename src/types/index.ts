@@ -1,10 +1,10 @@
-export type Priority = 'عاجل' | 'مهم' | 'لاحقاً';
-export type Effort = 'سهل' | 'متوسط' | 'صعب';
+export type Priority = 'High' | 'Medium' | 'Low';
+export type Effort = 'Easy' | 'Medium' | 'Hard';
 
 export interface Idea {
-  title: string; // الفكرة أو الملاحظة
+  title: string;
   priority: Priority;
-  nextStep: string; // خطوة عملية مقترحة للفكرة
+  nextStep: string;
   estimatedEffort: Effort;
   isDone: boolean;
 }

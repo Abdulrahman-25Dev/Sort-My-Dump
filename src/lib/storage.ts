@@ -1,44 +1,70 @@
 import { createMMKV } from 'react-native-mmkv';
-import { Plan } from '../types/index';
+import { Plan } from '../types';
 
 export const storage = createMMKV();
 
-// مفاتيح التخزين
 const KEYS = {
-  OPENROUTER_KEY: 'openrouter_key',
-  ENVIRONMENT: 'environment', // 'dev' | 'prod'
-  LOCAL_IP: 'local_ip',
-  HISTORY: 'history',
+  ENV: 'app_environment',
+  API_KEY: 'openrouter_api_key',
+  LOCAL_IP: 'ollama_local_ip',
+  MODEL_NAME: 'ai_model_name', // تمت إضافته
+  HISTORY: 'plans_history',
 };
 
 export const StorageService = {
-  // الإعدادات
-  getApiKey: () => storage.getString(KEYS.OPENROUTER_KEY) || '',
-  setApiKey: (key: string) => storage.set(KEYS.OPENROUTER_KEY, key),
-  
-  getEnvironment: () => (storage.getString(KEYS.ENVIRONMENT) as 'dev' | 'prod') || 'dev',
-  setEnvironment: (env: 'dev' | 'prod') => storage.set(KEYS.ENVIRONMENT, env),
-  
-  getLocalIp: () => storage.getString(KEYS.LOCAL_IP) || '192.168.1.x',
-  setLocalIp: (ip: string) => storage.set(KEYS.LOCAL_IP, ip),
+  // ---------- الإعدادات ----------
+  getEnvironment: (): 'dev' | 'prod' => {
+    return (storage.getString(KEYS.ENV) as 'dev' | 'prod') || 'dev';
+  },
+  setEnvironment: (env: 'dev' | 'prod') => {
+    storage.set(KEYS.ENV, env);
+  },
 
-  // الخطط السابقة (نحتفظ بآخر 20 خطة فقط)
+  getApiKey: (): string => {
+    return storage.getString(KEYS.API_KEY) || '';
+  },
+  setApiKey: (key: string) => {
+    storage.set(KEYS.API_KEY, key);
+  },
+
+  getLocalIp: (): string => {
+    return storage.getString(KEYS.LOCAL_IP) || '';
+  },
+  setLocalIp: (ip: string) => {
+    storage.set(KEYS.LOCAL_IP, ip);
+  },
+
+  // ---------- اسم النموذج ----------
+  getModelName: (): string => {
+    return storage.getString(KEYS.MODEL_NAME) || '';
+  },
+  setModelName: (model: string) => {
+    storage.set(KEYS.MODEL_NAME, model);
+  },
+
+  // ---------- سجل الخطط ----------
   getHistory: (): Plan[] => {
     const data = storage.getString(KEYS.HISTORY);
     return data ? JSON.parse(data) : [];
   },
+  
   savePlan: (plan: Plan) => {
     const history = StorageService.getHistory();
     const updated = [plan, ...history].slice(0, 20); // آخر 20 خطة
     storage.set(KEYS.HISTORY, JSON.stringify(updated));
   },
-  toggleTaskDone: (planId: string, categoryIndex: number, ideaIndex: number) => {
+
+  // ---------- تأشير المهمة كمنجزة ----------
+  toggleIdeaDone: (planId: string, categoryIndex: number, ideaIndex: number) => {
     const history = StorageService.getHistory();
     const plan = history.find(p => p.id === planId);
-    if (plan) {
+    
+    if (plan && plan.data.categories[categoryIndex]?.ideas[ideaIndex]) {
       const idea = plan.data.categories[categoryIndex].ideas[ideaIndex];
       idea.isDone = !idea.isDone;
       storage.set(KEYS.HISTORY, JSON.stringify(history));
+      return history;
     }
+    return history;
   }
 };

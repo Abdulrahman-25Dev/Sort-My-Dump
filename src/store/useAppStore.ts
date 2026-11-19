@@ -3,26 +3,34 @@ import { StorageService } from '../lib/storage';
 import { Plan } from '../types';
 
 interface AppState {
-  env: 'dev' | 'prod';
+  // الحالة
+  environment: 'dev' | 'prod';
   apiKey: string;
   localIp: string;
+  modelName: string;
   history: Plan[];
-  setEnv: (env: 'dev' | 'prod') => void;
+
+  // الدوال (Actions)
+  setEnvironment: (env: 'dev' | 'prod') => void;
   setApiKey: (key: string) => void;
   setLocalIp: (ip: string) => void;
+  setModelName: (model: string) => void;
   addPlan: (plan: Plan) => void;
-  toggleTask: (planId: string, catIdx: number, ideaIdx: number) => void;
+  toggleIdea: (planId: string, catIdx: number, ideaIdx: number) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  env: StorageService.getEnvironment(),
+  // القيم الابتدائية (تُقرأ من التخزين عند فتح التطبيق)
+  environment: StorageService.getEnvironment(),
   apiKey: StorageService.getApiKey(),
   localIp: StorageService.getLocalIp(),
+  modelName: StorageService.getModelName(), // سنضيف هذه الدالة في storage
   history: StorageService.getHistory(),
 
-  setEnv: (env) => {
-    StorageService.setEnvironment(env);
-    set({ env });
+  // الدوال
+  setEnvironment: (environment) => {
+    StorageService.setEnvironment(environment);
+    set({ environment });
   },
   setApiKey: (apiKey) => {
     StorageService.setApiKey(apiKey);
@@ -32,12 +40,17 @@ export const useAppStore = create<AppState>((set) => ({
     StorageService.setLocalIp(localIp);
     set({ localIp });
   },
+  setModelName: (modelName) => {
+    StorageService.setModelName(modelName);
+    set({ modelName });
+  },
   addPlan: (plan) => {
     StorageService.savePlan(plan);
     set({ history: StorageService.getHistory() });
   },
-  toggleTask: (planId, catIdx, ideaIdx) => {
-    StorageService.toggleTaskDone(planId, catIdx, ideaIdx);
+  toggleIdea: (planId, catIdx, ideaIdx) => {
+    // هنا نستدعي دالة التخزين التي تعدل الحالة، ثم نحدث الحالة العامة
+    StorageService.toggleIdeaDone(planId, catIdx, ideaIdx);
     set({ history: StorageService.getHistory() });
-  }
+  },
 }));

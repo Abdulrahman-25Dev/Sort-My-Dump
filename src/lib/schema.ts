@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 export const IdeaSchema = z.object({
   title: z.string().min(1),
-  priority: z.enum(['عاجل', 'مهم', 'لاحقاً']),
-  nextStep: z.string().min(1), // تم التعديل
-  estimatedEffort: z.enum(['سهل', 'متوسط', 'صعب']),
+  priority: z.enum(['High', 'Medium', 'Low']),
+  nextStep: z.string().min(1),
+  estimatedEffort: z.enum(['Easy', 'Medium', 'Hard']),
 });
 
 export const CategorySchema = z.object({
