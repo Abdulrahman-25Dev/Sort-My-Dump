@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Sort my dump",
+    "name": "BrainSort",
     "slug": "brain-dump-organizer",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -27,7 +27,6 @@
     },
     "plugins": [
       "expo-router",
-      "react-native-reanimated/plugin",
       [
         "expo-splash-screen",
         {
