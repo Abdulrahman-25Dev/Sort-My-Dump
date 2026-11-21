@@ -130,7 +130,7 @@ export default function SettingsScreen() {
             className="bg-bg-light dark:bg-bg-dark border border-primary-light/30 p-3 rounded-lg text-left text-primary-dark dark:text-primary-light"
             value={tempModel}
             onChangeText={setTempModel}
-            placeholder={environment === 'dev' ? 'qwen2.5:3b' : 'meta-llama/llama-3.2-3b-instruct:free'}
+            placeholder={environment === 'dev' ? 'llama3.2:3b' : 'meta-llama/llama-3.2-3b-instruct:free'}
             placeholderTextColor={theme === 'dark' ? '#3b82f6' : '#94a3b8'}
             selectionColor="#3b82f6"
             autoCapitalize="none"
