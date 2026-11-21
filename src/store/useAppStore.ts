@@ -18,6 +18,7 @@ interface AppState {
   setModelName: (model: string) => void;
   setTheme: (theme: 'light' | 'dark') => void;
   addPlan: (plan: Plan) => void;
+  clearHistory: () => void;
   toggleIdea: (planId: string, catIdx: number, ideaIdx: number) => void;
 }
 
@@ -54,6 +55,10 @@ export const useAppStore = create<AppState>((set) => ({
   addPlan: (plan) => {
     StorageService.savePlan(plan);
     set({ history: StorageService.getHistory() });
+  },
+  clearHistory: () => {
+    StorageService.clearHistory();
+    set({ history: [] });
   },
   toggleIdea: (planId, catIdx, ideaIdx) => {
     // هنا نستدعي دالة التخزين التي تعدل الحالة، ثم نحدث الحالة العامة

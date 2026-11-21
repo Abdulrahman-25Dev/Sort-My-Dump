@@ -1,39 +1,114 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { Alert, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../store/useAppStore';
 import { CategorySection } from '../components/CategorySection';
 import { Plan } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HistoryScreen() {
-  const { history, toggleIdea } = useAppStore();
+  const { history, toggleIdea, clearHistory, theme } = useAppStore();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
-  // إذا تم اختيار خطة، نعرضها
+  const iconColor = theme === 'dark' ? '#7AA891' : '#3D6352';
+
+  const handleClearHistory = () => {
+    Alert.alert(
+      'حذف السجل؟',
+      'سيتم حذف جميع الجلسات المحفوظة نهائياً ولا يمكن التراجع عن ذلك.',
+      [
+        { text: 'إلغاء', style: 'cancel' },
+        {
+          text: 'حذف الكل',
+          style: 'destructive',
+          onPress: () => clearHistory(),
+        },
+      ]
+    );
+  };
+
+  const handleToggleInSession = (catIdx: number, ideaIdx: number) => {
+    if (!selectedPlan) return;
+
+    toggleIdea(selectedPlan.id, catIdx, ideaIdx);
+
+    setSelectedPlan((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        data: {
+          ...prev.data,
+          categories: prev.data.categories.map((cat, cIdx) =>
+            cIdx !== catIdx
+              ? cat
+              : {
+                  ...cat,
+                  ideas: cat.ideas.map((idea, iIdx) =>
+                    iIdx !== ideaIdx ? idea : { ...idea, isDone: !idea.isDone }
+                  ),
+                }
+          ),
+        },
+      };
+    });
+  };
+
+  // عرض تفاصيل جلسة محددة
   if (selectedPlan) {
+    const suggestions = selectedPlan.data.mergedSuggestions ?? [];
+
     return (
       <SafeAreaView className="flex-1 bg-bg-light dark:bg-bg-dark">
-        <ScrollView className="flex-1 p-5">
-          <View className="flex-row-reverse items-center justify-between mb-6">
-            <Text className="text-2xl font-bold text-primary-dark dark:text-primary-light">تفاصيل الخطة</Text>
-            <TouchableOpacity onPress={() => setSelectedPlan(null)} className="bg-card-light dark:bg-card-dark border border-primary-light/30 p-2 px-4 rounded-lg">
-              <Text className="text-primary-dark dark:text-primary-light font-bold">رجوع</Text>
+        <ScrollView
+          className="flex-1 px-5 pt-4"
+          contentContainerStyle={{ paddingBottom: 48 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="flex-row-reverse items-center justify-between mb-6 mt-1">
+            <View className="items-end">
+              <Text className="text-2xl font-extrabold text-primary-light dark:text-primary-dark">
+                تفاصيل الجلسة
+              </Text>
+              <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                {new Date(selectedPlan.createdAt).toLocaleDateString('ar-SA')}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setSelectedPlan(null)}
+              className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark px-4 py-2 rounded-xl flex-row-reverse items-center"
+            >
+              <Ionicons name="arrow-forward" size={16} color={iconColor} />
+              <Text className="text-primary-light dark:text-primary-dark font-bold text-sm mr-1.5">
+                رجوع
+              </Text>
             </TouchableOpacity>
           </View>
+
+          {suggestions.length > 0 && (
+            <View className="mb-5 bg-card-light dark:bg-card-dark border border-primary-light/30 dark:border-primary-dark/30 rounded-2xl p-4">
+              <View className="flex-row-reverse items-center mb-2">
+                <Ionicons name="git-merge-outline" size={16} color={iconColor} />
+                <Text className="text-xs font-bold text-primary-light dark:text-primary-dark mr-1.5">
+                  روابط واقتراحات دمج
+                </Text>
+              </View>
+              {suggestions.map((item, idx) => (
+                <Text
+                  key={idx}
+                  className="text-right text-xs text-zinc-700 dark:text-zinc-300 leading-5 mt-1"
+                >
+                  - {item}
+                </Text>
+              ))}
+            </View>
+          )}
 
           {selectedPlan.data.categories.map((cat, catIdx) => (
             <CategorySection
               key={catIdx}
               category={cat}
-              onToggleIdea={(ideaIdx) => {
-                // تحديث التخزين
-                toggleIdea(selectedPlan.id, catIdx, ideaIdx);
-                // تحديث الواجهة المحلية
-                const updatedPlan = { ...selectedPlan };
-                updatedPlan.data.categories[catIdx].ideas[ideaIdx].isDone = !updatedPlan.data.categories[catIdx].ideas[ideaIdx].isDone;
-                setSelectedPlan(updatedPlan);
-              }}
+              onToggleIdea={(ideaIdx) => handleToggleInSession(catIdx, ideaIdx)}
             />
           ))}
         </ScrollView>
@@ -41,34 +116,85 @@ export default function HistoryScreen() {
     );
   }
 
-  // إذا لم يتم اختيار خطة، نعرض القائمة
+  // عرض قائمة الجلسات السابقة
   return (
     <SafeAreaView className="flex-1 bg-bg-light dark:bg-bg-dark">
-      <ScrollView className="flex-1 p-5">
-        <View className="flex-row-reverse items-center justify-between mb-6">
-          <Text className="text-2xl font-bold text-primary-dark dark:text-primary-light">الخطط السابقة</Text>
-          <TouchableOpacity onPress={() => router.back()} className="bg-card-light dark:bg-card-dark border border-primary-light/30 p-2 px-4 rounded-lg">
-            <Text className="text-primary-dark dark:text-primary-light font-bold">إغلاق</Text>
-          </TouchableOpacity>
+      <ScrollView
+        className="flex-1 px-5 pt-4"
+        contentContainerStyle={{ paddingBottom: 48 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex-row items-center justify-between mb-6 mt-1">
+          <Text className="text-2xl font-extrabold text-primary-light dark:text-primary-dark">
+            الجلسات السابقة
+          </Text>
+          <View className="flex-row items-center">
+            {history.length > 0 && (
+              <TouchableOpacity
+                onPress={handleClearHistory}
+                className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 p-2.5 rounded-full mr-2"
+                accessibilityLabel="حذف جميع الجلسات"
+              >
+                <Ionicons name="trash-outline" size={20} color="#DC2626" />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark p-2.5 rounded-full"
+              accessibilityLabel="إغلاق السجل"
+            >
+              <Ionicons name="close-outline" size={20} color={iconColor} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {history.length === 0 ? (
-          <Text className="text-center text-primary-light mt-10">لا توجد خطط محفوظة حتى الآن.</Text>
+          <View className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark rounded-2xl p-8 items-center mt-6">
+            <Ionicons name="layers-outline" size={32} color={iconColor} />
+            <Text className="text-center text-zinc-600 dark:text-zinc-300 font-semibold mt-3">
+              لا توجد جلسات محفوظة حتى الآن.
+            </Text>
+            <Text className="text-center text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+              أي نص ترتّبه في الشاشة الرئيسية سيُحفظ هنا
+            </Text>
+          </View>
         ) : (
-          history.map((plan) => (
-            <TouchableOpacity
-              key={plan.id}
-              className="bg-card-light dark:bg-card-dark p-4 rounded-xl mb-4 shadow-sm border border-primary-light/30"
-              onPress={() => setSelectedPlan(plan)}
-            >
-              <Text className="text-xs text-primary-light text-right mb-2">
-                {new Date(plan.createdAt).toLocaleDateString('ar-SA')}
-              </Text>
-              <Text className="text-right text-primary-dark dark:text-primary-light font-semibold" numberOfLines={2}>
-                {plan.originalText}
-              </Text>
-            </TouchableOpacity>
-          ))
+          history.map((plan) => {
+            const totalIdeas = plan.data.categories.reduce(
+              (acc, cat) => acc + cat.ideas.length,
+              0
+            );
+            const doneIdeas = plan.data.categories.reduce(
+              (acc, cat) =>
+                acc + cat.ideas.filter((idea) => idea.isDone).length,
+              0
+            );
+
+            return (
+              <TouchableOpacity
+                key={plan.id}
+                className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 border border-surface-light dark:border-surface-dark"
+                onPress={() => setSelectedPlan(plan)}
+                activeOpacity={0.75}
+              >
+                <View className="flex-row-reverse items-center justify-between mb-2">
+                  <Text className="text-xs text-zinc-500 dark:text-zinc-400">
+                    {new Date(plan.createdAt).toLocaleDateString('ar-SA')}
+                  </Text>
+                  <Text className="text-xs font-semibold text-primary-light dark:text-primary-dark">
+                    {doneIdeas}/{totalIdeas} مكتمل • {plan.data.categories.length} مجموعات
+                  </Text>
+                </View>
+
+                <Text
+                  className="text-right text-zinc-800 dark:text-zinc-100 font-semibold leading-6"
+                  numberOfLines={2}
+                >
+                  {plan.originalText}
+                </Text>
+              </TouchableOpacity>
+            );
+          })
         )}
       </ScrollView>
     </SafeAreaView>

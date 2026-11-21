@@ -62,6 +62,10 @@ export const StorageService = {
     storage.set(KEYS.HISTORY, JSON.stringify(updated));
   },
 
+  clearHistory: () => {
+    storage.set(KEYS.HISTORY, JSON.stringify([]));
+  },
+
   // ---------- تأشير المهمة كمنجزة ----------
   toggleIdeaDone: (planId: string, categoryIndex: number, ideaIndex: number) => {
     const history = StorageService.getHistory();
