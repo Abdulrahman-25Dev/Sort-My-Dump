@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { ArrowLeft } from 'lucide-react-native';
 import { useAppStore } from '../store/useAppStore';
 import { CategorySection } from '../components/CategorySection';
 import { Plan } from '../types';
@@ -65,29 +66,27 @@ export default function HistoryScreen() {
           contentContainerStyle={{ paddingBottom: 48 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row-reverse items-center justify-between mb-6 mt-1">
-            <View className="items-end">
-              <Text className="text-2xl font-extrabold text-primary-light dark:text-primary-dark">
+          <View className="flex-row items-center justify-between mb-6 mt-1">
+            <View className="items-start">
+              <Text className="text-2xl text-primary-light dark:text-primary-dark">
                 تفاصيل الجلسة
               </Text>
-              <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+              <Text className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
                 {new Date(selectedPlan.createdAt).toLocaleDateString('ar-SA')}
               </Text>
             </View>
             <TouchableOpacity
               onPress={() => setSelectedPlan(null)}
-              className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark px-4 py-2 rounded-xl flex-row-reverse items-center"
+              className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark px-2 py-2 rounded-xl flex-row items-center"
+              accessibilityLabel="رجوع إلى قائمة الجلسات"
             >
-              <Ionicons name="arrow-forward" size={16} color={iconColor} />
-              <Text className="text-primary-light dark:text-primary-dark font-bold text-sm mr-1.5">
-                رجوع
-              </Text>
+              <ArrowLeft size={24} color={iconColor} />
             </TouchableOpacity>
           </View>
 
           {suggestions.length > 0 && (
             <View className="mb-5 bg-card-light dark:bg-card-dark border border-primary-light/30 dark:border-primary-dark/30 rounded-2xl p-4">
-              <View className="flex-row-reverse items-center mb-2">
+              <View className="flex-row items-center mb-2">
                 <Ionicons name="git-merge-outline" size={16} color={iconColor} />
                 <Text className="text-xs font-bold text-primary-light dark:text-primary-dark mr-1.5">
                   روابط واقتراحات دمج
@@ -125,7 +124,7 @@ export default function HistoryScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="flex-row items-center justify-between mb-6 mt-1">
-          <Text className="text-2xl font-extrabold text-primary-light dark:text-primary-dark">
+          <Text className="text-2xl text-primary-light dark:text-primary-dark">
             الجلسات السابقة
           </Text>
           <View className="flex-row items-center">
@@ -141,9 +140,9 @@ export default function HistoryScreen() {
             <TouchableOpacity
               onPress={() => router.back()}
               className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark p-2.5 rounded-full"
-              accessibilityLabel="إغلاق السجل"
+              accessibilityLabel="رجوع"
             >
-              <Ionicons name="close-outline" size={20} color={iconColor} />
+              <ArrowLeft size={20} color={iconColor} />
             </TouchableOpacity>
           </View>
         </View>

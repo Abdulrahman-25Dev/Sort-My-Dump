@@ -37,7 +37,7 @@ export const StorageService = {
 
   // ---------- اسم النموذج ----------
   getModelName: (): string => {
-    return storage.getString(KEYS.MODEL_NAME) || '';
+    return storage.getString(KEYS.MODEL_NAME) || 'qwen2.5:3b';
   },
   setModelName: (model: string) => {
     storage.set(KEYS.MODEL_NAME, model);

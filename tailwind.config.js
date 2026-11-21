@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./app/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
@@ -6,30 +7,30 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // اللون الأساسي: Sage متزن ومقروء في الوضعين
+        // اللون الأساسي: مستوحى من الكومبو (فيروزي)
         primary: {
-          light: '#3D6352',
-          dark: '#7AA891',
+          light: '#0F766E', // Teal 700 (للوضع الفاتح، داككن للتباين)
+          dark: '#22D3C5',  // Teal 400 (للوضع الداكن، مقارب للصورة)
         },
-        // لون التمييز (مثل زر الترتيب أو المؤشرات النشطة): أهدأ من الليموني الفاقع
+        // اللون الثانوي (للتدرجات أو الأزرار الثانوية)
         accent: {
-          light: '#2F5242',
-          dark: '#8BB8A1',
+          light: '#0E7490', // Cyan 700
+          dark: '#67E8F9',  // Cyan 300
         },
-        // الخلفيات: مريحة للعين بدون حدة
+        // الخلفيات
         bg: {
-          light: '#F5F7F5',
-          dark: '#0F1412',
+          light: '#F8FAFC', // Slate 50 (أبيض مائل للأزرق الباهت)
+          dark: '#09090B',  // Zinc 950 (أسود عميق)
         },
-        // البطاقات: تباين لطيف ومريح فوق الخلفية
+        // البطاقات
         card: {
           light: '#FFFFFF',
-          dark: '#18201D',
+          dark: '#18181B',
         },
-        // الحدود والأسطح الثانوية
+        // الحدود
         surface: {
-          light: '#E3EAE6',
-          dark: '#26322D',
+          light: '#F1F5F9', // Slate 100
+          dark: '#27272A',  // Zinc 800
         },
       },
     },

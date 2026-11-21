@@ -21,6 +21,7 @@ import {
 import { useAppStore } from "../store/useAppStore";
 import { analyzeBrainDump } from "../lib/ai";
 import { CategorySection } from "../components/CategorySection";
+import { SkeletonLoader } from "../components/SkeletonLoader";
 import { AiResponse } from "../types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColorScheme } from "nativewind";
@@ -33,6 +34,17 @@ export default function HomeScreen() {
   const { colorScheme } = useColorScheme();
   const headerIconColor =
     colorScheme === "dark" ? "#A9CDB8" : "#254438";
+  const analyzeEnabled = Boolean(text.trim()) && !loading;
+  const analyzeContentColor =
+    colorScheme === "dark"
+      ? analyzeEnabled
+        ? "black"
+        : "white"
+      : analyzeEnabled
+        ? "white"
+        : "black";
+  const analyzeContentTextClass =
+    analyzeContentColor === "black" ? "text-black" : "text-white";
 
   const { environment, apiKey, localIp, modelName, addPlan, toggleIdea } =
     useAppStore();
@@ -180,22 +192,24 @@ export default function HomeScreen() {
 
               <TouchableOpacity
                 className={`px-5 py-2.5 rounded-2xl flex-row-reverse items-center ${
-                  !text.trim() || loading
-                    ? "bg-surface-light dark:bg-surface-dark"
-                    : "bg-primary-light dark:bg-primary-dark"
+                  analyzeEnabled
+                    ? "bg-primary-light dark:bg-primary-dark"
+                    : "bg-surface-light dark:bg-surface-dark"
                 }`}
                 onPress={handleAnalyze}
-                disabled={!text.trim() || loading}
+                disabled={!analyzeEnabled}
                 activeOpacity={0.85}
               >
                 {loading ? (
                   <>
                     <ActivityIndicator
-                      color="white"
+                      color={analyzeContentColor}
                       size="small"
                       className="ml-2"
                     />
-                    <Text className="text-white dark:text-white font-semibold text-sm">
+                    <Text
+                      className={`font-semibold text-sm ${analyzeContentTextClass}`}
+                    >
                       يرتّب...
                     </Text>
                   </>
@@ -203,11 +217,13 @@ export default function HomeScreen() {
                   <>
                     <Sparkles
                       size={16}
-                      color="white"
+                      color={analyzeContentColor}
                       strokeWidth={2}
                       className="ml-1.5"
                     />
-                    <Text className="text-white dark:text-white font-semibold text-sm pr-2">
+                    <Text
+                      className={`font-semibold text-sm pr-2 ${analyzeContentTextClass}`}
+                    >
                       رتّب أفكاري
                     </Text>
                   </>
@@ -242,6 +258,8 @@ export default function HomeScreen() {
               </View>
             </View>
           )}
+
+          {loading && <SkeletonLoader />}
 
           {/* عرض النتائج المنظمة */}
           {result && (

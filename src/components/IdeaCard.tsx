@@ -21,8 +21,8 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
     >
       {/* تغيير الأيقونة حسب النوع: مربع تأشير للمهمة، ومصباح للفكرة */}
       {isTask ? (
-        <View className={`w-5 h-5 rounded-full border-2 mt-1 mr-3 items-center justify-center ${idea.isDone ? 'bg-primary-light dark:bg-primary-dark border-primary-light dark:border-primary-dark' : 'border-primary-light/40 dark:border-primary-dark/40'}`}>
-          {idea.isDone && <Text className="text-white text-[10px] font-bold">✓</Text>}
+        <View className={`w-6 h-6 rounded-full border-2 mt-1 mr-3 items-center justify-center ${idea.isDone ? 'bg-primary-light dark:bg-primary-dark border-primary-light dark:border-primary-dark' : 'border-primary-light/40 dark:border-primary-dark/40'}`}>
+          {idea.isDone && <Text className="text-white dark:text-black text-[10px] font-bold">✓</Text>}
         </View>
       ) : (
         <View className="w-5 h-5 mt-1 mr-3 items-center justify-center">

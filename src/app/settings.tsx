@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../store/useAppStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const DEV_MODELS = ['qwen2.5:7b', 'qwen2.5:3b', 'llama3.2:3b'];
+const DEV_MODELS = ['qwen2.5:3b', 'qwen2.5:7b', 'llama3.2:3b'];
 const PROD_MODELS = [
   'qwen/qwen-2.5-72b-instruct:free',
   'meta-llama/llama-3.2-3b-instruct:free',
@@ -101,12 +101,12 @@ export default function SettingsScreen() {
           </View>
 
           {/* تبديل الوضع الليلي */}
-          <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row-reverse items-center justify-between border border-surface-light dark:border-surface-dark">
+          <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row items-center justify-between border border-surface-light dark:border-surface-dark">
             <View className="flex-1 mr-4">
-              <Text className="text-base font-bold text-right text-zinc-800 dark:text-zinc-100">
+              <Text className="text-base font-bold text-zinc-800 dark:text-zinc-100">
                 الوضع الليلي
               </Text>
-              <Text className="text-xs text-zinc-500 dark:text-zinc-400 text-right mt-1">
+              <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                 {theme === 'dark' ? 'مفعل (مريح للعين ليلاً)' : 'الوضع النهاري الهادئ'}
               </Text>
             </View>
@@ -122,12 +122,12 @@ export default function SettingsScreen() {
           </View>
 
           {/* تبديل البيئة */}
-          <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row-reverse items-center justify-between border border-surface-light dark:border-surface-dark">
+          <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row items-center justify-between border border-surface-light dark:border-surface-dark">
             <View className="flex-1 mr-4">
-              <Text className="text-base font-bold text-right text-zinc-800 dark:text-zinc-100">
+              <Text className="text-base font-bold text-zinc-800 dark:text-zinc-100">
                 بيئة التطوير (Ollama المحلي)
               </Text>
-              <Text className="text-xs text-zinc-500 dark:text-zinc-400 text-right mt-1">
+              <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                 {environment === 'dev'
                   ? 'الاتصال مفعل عبر جهازك المحلي'
                   : 'وضع الإنتاج مفعل عبر OpenRouter'}
@@ -147,7 +147,7 @@ export default function SettingsScreen() {
           {/* إعدادات وضع التطوير */}
           {environment === 'dev' && (
             <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 border border-surface-light dark:border-surface-dark">
-              <View className="flex-row-reverse items-center justify-between mb-2">
+              <View className="flex-row items-center justify-between mb-2">
                 <View className="flex-row-reverse items-center">
                   <Ionicons
                     name="laptop-outline"
@@ -155,16 +155,16 @@ export default function SettingsScreen() {
                     color={switchActiveColor}
                     className="ml-2"
                   />
-                  <Text className="text-right font-bold text-zinc-800 dark:text-zinc-100">
+                  <Text className=" font-bold text-zinc-800 dark:text-zinc-100">
                     IP اللابتوب (منفذ 11434)
                   </Text>
                 </View>
               </View>
-              <Text className="text-right text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              <Text className=" text-xs text-zinc-500 dark:text-zinc-400 mb-3">
                 تأكد أن الجوال واللابتوب على نفس الشبكة وأن Ollama يستمع على 0.0.0.0
               </Text>
               <TextInput
-                className="bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark p-3 rounded-xl text-left text-zinc-800 dark:text-zinc-100"
+                className="bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark p-3 rounded-xl text-zinc-800 dark:text-zinc-100"
                 value={tempIp}
                 onChangeText={setTempIp}
                 placeholder="192.168.1.10"
@@ -179,7 +179,7 @@ export default function SettingsScreen() {
           {/* إعدادات وضع الإنتاج (مفتاح OpenRouter) */}
           {environment === 'prod' && (
             <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 border border-surface-light dark:border-surface-dark">
-              <View className="flex-row-reverse items-center justify-between mb-2">
+              <View className="flex-row items-center justify-between mb-2">
                 <View className="flex-row-reverse items-center">
                   <Ionicons
                     name="key-outline"
@@ -187,7 +187,7 @@ export default function SettingsScreen() {
                     color={switchActiveColor}
                     className="ml-2"
                   />
-                  <Text className="text-right font-bold text-zinc-800 dark:text-zinc-100">
+                  <Text className=" font-bold text-zinc-800 dark:text-zinc-100">
                     مفتاح OpenRouter لنسخة الإنتاج
                   </Text>
                 </View>
@@ -199,12 +199,12 @@ export default function SettingsScreen() {
                   </TouchableOpacity>
                 )}
               </View>
-              <Text className="text-right text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              <Text className=" text-xs text-zinc-500 dark:text-zinc-400 mb-3">
                 أدخل مفتاح API الخاص بك (يبدأ عادةً بـ sk-or-v1-) لتشغيل التحليل في الإنتاج
               </Text>
               <View className="flex-row items-center bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark rounded-xl px-3">
                 <TextInput
-                  className="flex-1 py-3 text-left text-zinc-800 dark:text-zinc-100"
+                  className="flex-1 py-3 text-zinc-800 dark:text-zinc-100"
                   value={tempKey}
                   onChangeText={setTempKey}
                   placeholder="sk-or-v1-..."
@@ -231,7 +231,7 @@ export default function SettingsScreen() {
 
           {/* اختيار النموذج */}
           <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-7 border border-surface-light dark:border-surface-dark">
-            <View className="flex-row-reverse items-center justify-between mb-2">
+            <View className="flex-row items-center justify-between mb-2">
               <View className="flex-row-reverse items-center">
                 <Ionicons
                   name="hardware-chip-outline"
@@ -239,7 +239,7 @@ export default function SettingsScreen() {
                   color={switchActiveColor}
                   className="ml-2"
                 />
-                <Text className="text-right font-bold text-zinc-800 dark:text-zinc-100">
+                <Text className=" font-bold text-zinc-800 dark:text-zinc-100">
                   اسم النموذج (Model ID)
                 </Text>
               </View>
@@ -252,11 +252,11 @@ export default function SettingsScreen() {
               )}
             </View>
 
-            <Text className="text-right text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+            <Text className=" text-xs text-zinc-500 dark:text-zinc-400 mb-3">
               اختر نموذجاً سريعاً أو اكتب اسم النموذج يدوياً (اتركه فارغاً للافتراضي)
             </Text>
 
-            <View className="flex-row-reverse flex-wrap gap-2 mb-3">
+            <View className="flex-row flex-wrap gap-2 mb-3">
               {activePresets.map((preset) => {
                 const isSelected = tempModel === preset;
                 return (
@@ -284,12 +284,12 @@ export default function SettingsScreen() {
             </View>
 
             <TextInput
-              className="bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark p-3 rounded-xl text-left text-zinc-800 dark:text-zinc-100"
+              className="bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark p-3 rounded-xl text-zinc-800 dark:text-zinc-100"
               value={tempModel}
               onChangeText={setTempModel}
               placeholder={
                 environment === 'dev'
-                  ? 'qwen2.5:7b'
+                  ? 'qwen2.5:3b'
                   : 'qwen/qwen-2.5-72b-instruct:free'
               }
               placeholderTextColor="#8da398"
