@@ -23,7 +23,7 @@ export async function analyzeBrainDump(
   // 1. تحديد المسار (تطوير أم إنتاج)
   if (config.environment === "dev") {
     url = `http://${config.localIp}:11434/v1/chat/completions`;
-    finalModel = config.modelName || "llama3.2:3b"; // افتراضي إذا كان الحقل فارغاً
+    finalModel = config.modelName || "qwen2.5:3b"; // افتراضي إذا كان الحقل فارغاً
     headers = { "Content-Type": "application/json" };
   } else {
     url = "https://openrouter.ai/api/v1/chat/completions";

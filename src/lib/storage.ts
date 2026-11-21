@@ -8,6 +8,7 @@ const KEYS = {
   API_KEY: 'openrouter_api_key',
   LOCAL_IP: 'ollama_local_ip',
   MODEL_NAME: 'ai_model_name', // تمت إضافته
+  THEME: 'app_theme',
   HISTORY: 'plans_history',
 };
 
@@ -40,6 +41,13 @@ export const StorageService = {
   },
   setModelName: (model: string) => {
     storage.set(KEYS.MODEL_NAME, model);
+  },
+
+  getTheme: (): 'light' | 'dark' => {
+    return (storage.getString(KEYS.THEME) as 'light' | 'dark') || 'light';
+  },
+  setTheme: (theme: 'light' | 'dark') => {
+    storage.set(KEYS.THEME, theme);
   },
 
   // ---------- سجل الخطط ----------

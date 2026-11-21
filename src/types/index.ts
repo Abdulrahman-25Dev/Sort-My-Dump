@@ -1,8 +1,10 @@
-export type Priority = 'High' | 'Medium' | 'Low';
-export type Effort = 'Easy' | 'Medium' | 'Hard';
+export type Priority = 'عاجل' | 'مهم' | 'لاحقاً';
+export type Effort = 'سهل' | 'متوسط' | 'صعب';
+export type IdeaType = 'task' | 'thought';
 
 export interface Idea {
   title: string;
+  type: IdeaType; // <--- تأكد من وجود هذا السطر
   priority: Priority;
   nextStep: string;
   estimatedEffort: Effort;
