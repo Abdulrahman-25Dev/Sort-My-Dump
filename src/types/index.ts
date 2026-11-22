@@ -4,7 +4,7 @@ export type IdeaType = 'task' | 'thought';
 
 export interface Idea {
   title: string;
-  type: IdeaType; // <--- تأكد من وجود هذا السطر
+  type: IdeaType;
   priority: Priority;
   nextStep: string;
   estimatedEffort: Effort;

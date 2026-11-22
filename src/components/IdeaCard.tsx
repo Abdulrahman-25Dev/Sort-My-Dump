@@ -51,30 +51,30 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
         <View className="flex-row flex-wrap justify-end" style={{ direction: 'ltr' }}>
           
           {/* شارة النوع (مهمة أو فكرة) */}
-          <View className={`px-2 py-1 rounded-md mr-2 ${isTask ? 'bg-primary-light/10 dark:bg-primary-dark/15' : 'bg-accent-light/10 dark:bg-accent-dark/15'}`}>
-            <Text className={`text-[10px] font-bold ${isTask ? 'text-primary-light dark:text-primary-dark' : 'text-accent-light dark:text-accent-dark'}`}>
+          <View className={`px-2 py-1 rounded-md mr-2 ${isTask ? 'bg-teal-100 dark:bg-teal-900/40' : 'bg-sky-100 dark:bg-sky-900/40'}`}>
+            <Text className={`text-[10px] font-bold ${isTask ? 'text-teal-700 dark:text-teal-300' : 'text-sky-700 dark:text-sky-300'}`}>
               {isTask ? 'مهمة' : 'فكرة'}
             </Text>
           </View>
 
           {/* شارة الأولوية */}
           <View className={`px-2 py-1 rounded-md mr-2 ${
-            idea.priority === 'عاجل' ? 'bg-accent-light/15 dark:bg-accent-dark/20' :
-            idea.priority === 'مهم' ? 'bg-primary-light/15 dark:bg-primary-dark/20' :
-            'bg-surface-light dark:bg-surface-dark'
+            idea.priority === 'عاجل' ? 'bg-rose-100 dark:bg-rose-900/40' :
+            idea.priority === 'مهم' ? 'bg-amber-100 dark:bg-amber-900/40' :
+            'bg-slate-100 dark:bg-slate-800/70'
           }`}>
             <Text className={`text-[10px] font-bold ${
-              idea.priority === 'عاجل' ? 'text-accent-light dark:text-accent-dark' :
-              idea.priority === 'مهم' ? 'text-primary-light dark:text-primary-dark' :
-              'text-primary-light/70 dark:text-primary-dark/70'
+              idea.priority === 'عاجل' ? 'text-rose-700 dark:text-rose-300' :
+              idea.priority === 'مهم' ? 'text-amber-700 dark:text-amber-300' :
+              'text-slate-600 dark:text-slate-300'
             }`}>
               {idea.priority}
             </Text>
           </View>
 
           {/* شارة الجهد */}
-          <View className="bg-surface-light dark:bg-surface-dark px-2 py-1 rounded-md">
-            <Text className="text-[10px] font-bold text-primary-light dark:text-primary-dark">
+          <View className="bg-indigo-100 dark:bg-indigo-900/40 px-2 py-1 rounded-md">
+            <Text className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300">
               {idea.estimatedEffort}
             </Text>
           </View>

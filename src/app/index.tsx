@@ -16,7 +16,6 @@ import {
   History as HistoryIcon,
   Settings,
   Sparkles,
-  GitMerge,
 } from "lucide-react-native";
 import { useAppStore } from "../store/useAppStore";
 import { analyzeBrainDump } from "../lib/ai";
@@ -264,32 +263,6 @@ export default function HomeScreen() {
           {/* عرض النتائج المنظمة */}
           {result && (
             <View className="mt-7">
-              {/* روابط واقتراحات الدمج إن وجدت */}
-              {result.mergedSuggestions &&
-                result.mergedSuggestions.length > 0 && (
-                  <View className="mb-5 bg-card-light dark:bg-card-dark border border-primary-light/30 dark:border-primary-dark/30 rounded-2xl p-4">
-                    <View className="flex-row items-center mb-2">
-                      <GitMerge
-                        size={16}
-                        color={headerIconColor}
-                        strokeWidth={2}
-                        className="ml-1.5"
-                      />
-                      <Text className="text-xs font-bold text-primary-light dark:text-primary-dark">
-                        روابط واقتراحات دمج
-                      </Text>
-                    </View>
-                    {result.mergedSuggestions.map((item, idx) => (
-                      <Text
-                        key={idx}
-                        className="text-right text-xs text-zinc-700 dark:text-zinc-300 leading-5 mt-1"
-                      >
-                        - {item}
-                      </Text>
-                    ))}
-                  </View>
-                )}
-
               {/* المجموعات المصنفة */}
               {result.categories.map((cat, catIdx) => (
                 <CategorySection

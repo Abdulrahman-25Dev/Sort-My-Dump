@@ -5,6 +5,7 @@ import { useColorScheme } from "nativewind";
 import { Stack } from "expo-router";
 import { useAppStore } from "../store/useAppStore";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
   const { theme } = useAppStore();
@@ -16,7 +17,8 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <Stack 
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack 
       screenOptions={{ 
         headerShown: false,
         animation: 'slide_from_left', // تأثير انزلاق من اليسار (مناسب للعربية)
@@ -27,6 +29,8 @@ export default function RootLayout() {
       <Stack.Screen name="settings" />
       <Stack.Screen name="History" />
     </Stack>
+      </GestureHandlerRootView>
+      
     </SafeAreaProvider>
   );
 }

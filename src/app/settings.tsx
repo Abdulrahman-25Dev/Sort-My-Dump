@@ -122,27 +122,27 @@ export default function SettingsScreen() {
           </View>
 
           {/* تبديل البيئة */}
-          <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row items-center justify-between border border-surface-light dark:border-surface-dark">
-            <View className="flex-1 mr-4">
-              <Text className="text-base font-bold text-zinc-800 dark:text-zinc-100">
-                بيئة التطوير (Ollama المحلي)
-              </Text>
-              <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                {environment === 'dev'
-                  ? 'الاتصال مفعل عبر جهازك المحلي'
-                  : 'وضع الإنتاج مفعل عبر OpenRouter'}
-              </Text>
+          {environment === 'dev' && (
+            <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row items-center justify-between border border-surface-light dark:border-surface-dark">
+              <View className="flex-1 mr-4">
+                <Text className="text-base font-bold text-zinc-800 dark:text-zinc-100">
+                  بيئة التطوير (Ollama المحلي)
+                </Text>
+                <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                  الاتصال مفعل عبر جهازك المحلي
+                </Text>
+              </View>
+              <Switch
+                value
+                onValueChange={(val) => setEnvironment(val ? 'dev' : 'prod')}
+                trackColor={{
+                  false: theme === 'dark' ? '#26322D' : '#E3EAE6',
+                  true: switchActiveColor,
+                }}
+                thumbColor="#ffffff"
+              />
             </View>
-            <Switch
-              value={environment === 'dev'}
-              onValueChange={(val) => setEnvironment(val ? 'dev' : 'prod')}
-              trackColor={{
-                false: theme === 'dark' ? '#26322D' : '#E3EAE6',
-                true: switchActiveColor,
-              }}
-              thumbColor="#ffffff"
-            />
-          </View>
+          )}
 
           {/* إعدادات وضع التطوير */}
           {environment === 'dev' && (

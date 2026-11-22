@@ -57,7 +57,6 @@ export default function HistoryScreen() {
 
   // عرض تفاصيل جلسة محددة
   if (selectedPlan) {
-    const suggestions = selectedPlan.data.mergedSuggestions ?? [];
 
     return (
       <SafeAreaView className="flex-1 bg-bg-light dark:bg-bg-dark">
@@ -83,25 +82,6 @@ export default function HistoryScreen() {
               <ArrowLeft size={24} color={iconColor} />
             </TouchableOpacity>
           </View>
-
-          {suggestions.length > 0 && (
-            <View className="mb-5 bg-card-light dark:bg-card-dark border border-primary-light/30 dark:border-primary-dark/30 rounded-2xl p-4">
-              <View className="flex-row items-center mb-2">
-                <Ionicons name="git-merge-outline" size={16} color={iconColor} />
-                <Text className="text-xs font-bold text-primary-light dark:text-primary-dark mr-1.5">
-                  روابط واقتراحات دمج
-                </Text>
-              </View>
-              {suggestions.map((item, idx) => (
-                <Text
-                  key={idx}
-                  className="text-right text-xs text-zinc-700 dark:text-zinc-300 leading-5 mt-1"
-                >
-                  - {item}
-                </Text>
-              ))}
-            </View>
-          )}
 
           {selectedPlan.data.categories.map((cat, catIdx) => (
             <CategorySection

@@ -81,6 +81,23 @@ export async function analyzeBrainDump(
 
     return finalData;
   } catch (error: any) {
+    if (error.response?.status === 402) {
+      throw new Error(
+        "رصيدك في OpenRouter غير كافٍ. يرجى شحن الرصيد من موقع OpenRouter.",
+      );
+    }
+
+    if (error.response?.status === 429) {
+      if (retries > 0) {
+        console.warn("AI request rate-limited, retrying once...");
+        return analyzeBrainDump(text, config, 0);
+      }
+
+      throw new Error(
+        "لقد وصلت للحد اليومي للنموذج المجاني. حاول غداً أو جرب نموذجاً آخر.",
+      );
+    }
+
     // إذا فشل الاتصال أو كان الـ JSON غير صالح، نعيد المحاولة
     if (retries > 0) {
       console.warn(`AI request failed, retrying... (${retries} left)`);
