@@ -123,7 +123,7 @@ export default function HomeScreen() {
           {/* ترويسة عصرية ومختلفة */}
           <View className={` items-center justify-between mb-6 mt-1 px-2 ${i18n.language === "ar" ? "flex-row" : "flex-row-reverse"}`}>
             <View className="items-end">
-              <Text className="text-xl font-extrabold text-primary-light dark:text-primary-dark">
+              <Text className="text-lg font-extrabold text-primary-light dark:text-primary-dark">
                 {t("home.title")}
               </Text>
             </View>
@@ -176,7 +176,7 @@ export default function HomeScreen() {
             />
 
             {/* شريط الإجراءات السفلي المدمج داخل البطاقة */}
-            <View className={`${i18n.language === "ar" ? "flex-row" : "flex-row-reverse"} items-center justify-between px-4 py-3 bg-bg-light/70 dark:bg-bg-dark/60 border-t border-surface-light dark:border-surface-dark`}>
+            <View className={`flex-row-reverse items-center justify-between px-4 py-3 bg-bg-light/70 dark:bg-bg-dark/60 border-t border-surface-light dark:border-surface-dark`}>
               <View className="flex-row-reverse items-center gap-3">
                 <Text className="text-xs text-zinc-500 dark:text-zinc-400">
                   {text.trim().length > 0

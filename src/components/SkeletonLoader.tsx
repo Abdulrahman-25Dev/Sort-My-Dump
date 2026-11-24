@@ -8,6 +8,7 @@ import Animated, {
   withDelay
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
+import i18n from '@/I18n/i18next';
 
 export function SkeletonCard({ delay = 0 }) {
   const opacity = useSharedValue(0.5);
@@ -35,7 +36,7 @@ export function SkeletonCard({ delay = 0 }) {
       style={animatedStyle} 
       className="bg-white dark:bg-zinc-900 p-4 rounded-2xl mb-3 border border-zinc-100 dark:border-zinc-800 shadow-sm"
     >
-      <View className=" items-start">
+      <View className={` ${i18n.language === "ar" ? "flex-row-reverse" : "flex-row"} gap-3`}>
         {/* دائرة التأشير */}
         <View className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 ml-3 mt-1" />
         
