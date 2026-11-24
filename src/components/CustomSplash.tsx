@@ -9,12 +9,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BrainIcon } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 
 interface CustomSplashProps {
   onFinish: () => void;
 }
 
 export function CustomSplash({ onFinish }: CustomSplashProps) {
+  const { t } = useTranslation();
   const iconScale = useSharedValue(0.92);
   const iconOpacity = useSharedValue(1);
   const textOpacity = useSharedValue(0);
@@ -60,7 +62,7 @@ export function CustomSplash({ onFinish }: CustomSplashProps) {
         <Animated.View style={[styles.textContainer, textStyle]}>
           <Text style={styles.title}>BrainSort</Text>
           <Text style={styles.subtitle}>
-            رتّب أفكارك.. بوضوح
+            {t('splash.subtitle')}
           </Text>
         </Animated.View>
       </LinearGradient>

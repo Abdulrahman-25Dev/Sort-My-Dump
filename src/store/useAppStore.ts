@@ -9,6 +9,7 @@ interface AppState {
   localIp: string;
   modelName: string;
   theme: 'light' | 'dark';
+  language: 'ar' | 'en';
   history: Plan[];
 
   // الدوال (Actions)
@@ -17,6 +18,7 @@ interface AppState {
   setLocalIp: (ip: string) => void;
   setModelName: (model: string) => void;
   setTheme: (theme: 'light' | 'dark') => void;
+  setLanguage: (language: 'ar' | 'en') => void;
   addPlan: (plan: Plan) => void;
   clearHistory: () => void;
   toggleIdea: (planId: string, catIdx: number, ideaIdx: number) => void;
@@ -29,6 +31,7 @@ export const useAppStore = create<AppState>((set) => ({
   localIp: StorageService.getLocalIp(),
   modelName: StorageService.getModelName(), // سنضيف هذه الدالة في storage
   theme: StorageService.getTheme(),
+  language: StorageService.getLanguage(),
   history: StorageService.getHistory(),
 
   // الدوال
@@ -51,6 +54,10 @@ export const useAppStore = create<AppState>((set) => ({
   setTheme: (theme) => {
     StorageService.setTheme(theme);
     set({ theme });
+  },
+  setLanguage: (language) => {
+    StorageService.setLanguage(language);
+    set({ language });
   },
   addPlan: (plan) => {
     StorageService.savePlan(plan);

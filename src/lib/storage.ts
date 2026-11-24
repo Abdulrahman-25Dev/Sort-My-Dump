@@ -9,6 +9,7 @@ const KEYS = {
   LOCAL_IP: 'ollama_local_ip',
   MODEL_NAME: 'ai_model_name', // تمت إضافته
   THEME: 'app_theme',
+  LANGUAGE: 'app_language',
   HISTORY: 'plans_history',
 };
 
@@ -48,6 +49,13 @@ export const StorageService = {
   },
   setTheme: (theme: 'light' | 'dark') => {
     storage.set(KEYS.THEME, theme);
+  },
+
+  getLanguage: (): 'ar' | 'en' => {
+    return storage.getString(KEYS.LANGUAGE) === 'en' ? 'en' : 'ar';
+  },
+  setLanguage: (language: 'ar' | 'en') => {
+    storage.set(KEYS.LANGUAGE, language);
   },
 
   // ---------- سجل الخطط ----------

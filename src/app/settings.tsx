@@ -14,6 +14,8 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../store/useAppStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import i18n from '../I18n/i18next';
 
 const DEV_MODELS = ['qwen2.5:3b', 'qwen2.5:7b', 'llama3.2:3b'];
 const PROD_MODELS = [
@@ -33,7 +35,10 @@ export default function SettingsScreen() {
     setModelName,
     theme,
     setTheme,
+    language,
+    setLanguage,
   } = useAppStore();
+  const { t } = useTranslation();
 
   const [tempIp, setTempIp] = useState(localIp);
   const [tempKey, setTempKey] = useState(apiKey);
@@ -47,12 +52,12 @@ export default function SettingsScreen() {
     const trimmedModel = tempModel.trim();
 
     if (environment === 'dev' && !trimmedIp) {
-      Alert.alert('تنبيه', 'الرجاء إدخال IP اللابتوب للاتصال بـ Ollama.');
+      Alert.alert(t('settings.alertTitle'), t('settings.enterIp'));
       return;
     }
 
     if (environment === 'prod' && !trimmedKey) {
-      Alert.alert('تنبيه', 'الرجاء إدخال مفتاح OpenRouter لنسخة الإنتاج.');
+      Alert.alert(t('settings.alertTitle'), t('settings.enterApiKey'));
       return;
     }
 
@@ -60,8 +65,8 @@ export default function SettingsScreen() {
     setApiKey(trimmedKey);
     setModelName(trimmedModel);
 
-    Alert.alert('تم الحفظ', 'تم تحديث الإعدادات بنجاح', [
-      { text: 'حسناً', onPress: () => router.back() },
+    Alert.alert(t('settings.savedTitle'), t('settings.savedMessage'), [
+      { text: t('common.ok'), onPress: () => router.back() },
     ]);
   };
 
@@ -81,16 +86,16 @@ export default function SettingsScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* الترويسة */}
-          <View className="flex-row items-center justify-between mb-7 mt-2">
+          <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between mb-6`}>
             <View className="items-end">
               <Text className="text-2xl font-extrabold text-primary-light dark:text-primary-dark">
-                الإعدادات
+                {t('settings.title')}
               </Text>
             </View>
             <TouchableOpacity
               onPress={() => router.back()}
               className="bg-card-light dark:bg-card-dark p-2.5 rounded-full border border-surface-light dark:border-surface-dark"
-              accessibilityLabel="إغلاق الإعدادات"
+              accessibilityLabel={t('settings.close')}
             >
               <Ionicons
                 name="close-outline"
@@ -100,14 +105,40 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* تبديل الوضع الليلي */}
-          <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row items-center justify-between border border-surface-light dark:border-surface-dark">
+          <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 items-center justify-between border border-surface-light dark:border-surface-dark`}>
             <View className="flex-1 mr-4">
-              <Text className="text-base font-bold text-zinc-800 dark:text-zinc-100">
-                الوضع الليلي
+              <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-base font-bold text-zinc-800 dark:text-zinc-100`}>
+                {t('settings.language')}
               </Text>
-              <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                {theme === 'dark' ? 'مفعل (مريح للعين ليلاً)' : 'الوضع النهاري الهادئ'}
+              <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400 mt-1`}>
+                {language === 'ar' ? t('settings.arabic') : t('settings.english')}
+                {' · '}
+                {t('settings.languageDescription')}
+              </Text>
+            </View>
+            <Switch
+              value={language === 'en'}
+              onValueChange={(value) => {
+                const nextLanguage = value ? 'en' : 'ar';
+                setLanguage(nextLanguage);
+                void i18n.changeLanguage(nextLanguage);
+              }}
+              trackColor={{
+                false: theme === 'dark' ? '#26322D' : '#E3EAE6',
+                true: switchActiveColor,
+              }}
+              thumbColor="#ffffff"
+            />
+          </View>
+
+          {/* تبديل الوضع الليلي */}
+          <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 items-center justify-between border border-surface-light dark:border-surface-dark`}>
+            <View className="flex-1 mr-4">
+              <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-base font-bold text-zinc-800 dark:text-zinc-100`}>
+                {t('settings.darkMode')}
+              </Text>
+              <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400 mt-1`}>
+                {theme === 'dark' ? t('settings.darkModeEnabled') : t('settings.dayMode')}
               </Text>
             </View>
             <Switch
@@ -123,13 +154,13 @@ export default function SettingsScreen() {
 
           {/* تبديل البيئة */}
           {environment === 'dev' && (
-            <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 flex-row items-center justify-between border border-surface-light dark:border-surface-dark">
+            <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 items-center justify-between border border-surface-light dark:border-surface-dark`}>
               <View className="flex-1 mr-4">
-                <Text className="text-base font-bold text-zinc-800 dark:text-zinc-100">
-                  بيئة التطوير (Ollama المحلي)
+                <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-base font-bold text-zinc-800 dark:text-zinc-100`}>
+                  {t('settings.devEnvironment')}
                 </Text>
-                <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                  الاتصال مفعل عبر جهازك المحلي
+                <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400 mt-1`}>
+                  {t('settings.devConnection')}
                 </Text>
               </View>
               <Switch
@@ -147,7 +178,7 @@ export default function SettingsScreen() {
           {/* إعدادات وضع التطوير */}
           {environment === 'dev' && (
             <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 border border-surface-light dark:border-surface-dark">
-              <View className="flex-row items-center justify-between mb-2">
+              <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between mb-2`}>
                 <View className="flex-row-reverse items-center">
                   <Ionicons
                     name="laptop-outline"
@@ -155,13 +186,13 @@ export default function SettingsScreen() {
                     color={switchActiveColor}
                     className="ml-2"
                   />
-                  <Text className=" font-bold text-zinc-800 dark:text-zinc-100">
-                    IP اللابتوب (منفذ 11434)
+                  <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} font-bold text-zinc-800 dark:text-zinc-100`}>
+                    {t('settings.laptopIp')}
                   </Text>
                 </View>
               </View>
-              <Text className=" text-xs text-zinc-500 dark:text-zinc-400 mb-3">
-                تأكد أن الجوال واللابتوب على نفس الشبكة وأن Ollama يستمع على 0.0.0.0
+              <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400 mb-3`}>
+                {t('settings.ipDescription')}
               </Text>
               <TextInput
                 className="bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark p-3 rounded-xl text-zinc-800 dark:text-zinc-100"
@@ -179,7 +210,7 @@ export default function SettingsScreen() {
           {/* إعدادات وضع الإنتاج (مفتاح OpenRouter) */}
           {environment === 'prod' && (
             <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-4 border border-surface-light dark:border-surface-dark">
-              <View className="flex-row items-center justify-between mb-2">
+              <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between mb-2`}>
                 <View className="flex-row-reverse items-center">
                   <Ionicons
                     name="key-outline"
@@ -187,20 +218,20 @@ export default function SettingsScreen() {
                     color={switchActiveColor}
                     className="ml-2"
                   />
-                  <Text className=" font-bold text-zinc-800 dark:text-zinc-100">
-                    مفتاح OpenRouter لنسخة الإنتاج
+                  <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} font-bold text-zinc-800 dark:text-zinc-100`}>
+                    {t('settings.openRouterKey')}
                   </Text>
                 </View>
                 {tempKey.length > 0 && (
                   <TouchableOpacity onPress={() => setTempKey('')}>
-                    <Text className="text-xs text-rose-600 dark:text-rose-400 font-medium">
-                      مسح
+                    <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-rose-600 dark:text-rose-400 font-medium`}>
+                      {t('common.clear')}
                     </Text>
                   </TouchableOpacity>
                 )}
               </View>
-              <Text className=" text-xs text-zinc-500 dark:text-zinc-400 mb-3">
-                أدخل مفتاح API الخاص بك (يبدأ عادةً بـ sk-or-v1-) لتشغيل التحليل في الإنتاج
+              <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400 mb-3`}>
+                {t('settings.apiDescription')}
               </Text>
               <View className="flex-row items-center bg-bg-light dark:bg-bg-dark border border-surface-light dark:border-surface-dark rounded-xl px-3">
                 <TextInput
@@ -217,7 +248,7 @@ export default function SettingsScreen() {
                 <TouchableOpacity
                   onPress={() => setShowApiKey((prev) => !prev)}
                   className="p-1.5"
-                  accessibilityLabel={showApiKey ? 'إخفاء المفتاح' : 'إظهار المفتاح'}
+                  accessibilityLabel={showApiKey ? t('settings.hideKey') : t('settings.showKey')}
                 >
                   <Ionicons
                     name={showApiKey ? 'eye-off-outline' : 'eye-outline'}
@@ -231,7 +262,7 @@ export default function SettingsScreen() {
 
           {/* اختيار النموذج */}
           <View className="bg-card-light dark:bg-card-dark p-4 rounded-2xl mb-7 border border-surface-light dark:border-surface-dark">
-            <View className="flex-row items-center justify-between mb-2">
+            <View className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between mb-2`}>
               <View className="flex-row-reverse items-center">
                 <Ionicons
                   name="hardware-chip-outline"
@@ -239,21 +270,21 @@ export default function SettingsScreen() {
                   color={switchActiveColor}
                   className="ml-2"
                 />
-                <Text className=" font-bold text-zinc-800 dark:text-zinc-100">
-                  اسم النموذج (Model ID)
+                <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} font-bold text-zinc-800 dark:text-zinc-100`}>
+                  {t('settings.modelName')}
                 </Text>
               </View>
               {tempModel.length > 0 && (
                 <TouchableOpacity onPress={() => setTempModel('')}>
-                  <Text className="text-xs text-zinc-500 dark:text-zinc-400">
-                    افتراضي
+                  <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400`}>
+                    {t('settings.default')}
                   </Text>
                 </TouchableOpacity>
               )}
             </View>
 
-            <Text className=" text-xs text-zinc-500 dark:text-zinc-400 mb-3">
-              اختر نموذجاً سريعاً أو اكتب اسم النموذج يدوياً (اتركه فارغاً للافتراضي)
+            <Text className={`${i18n.language === 'ar' ? 'text-left' : 'text-right'} text-xs text-zinc-500 dark:text-zinc-400 mb-3`}>
+              {t('settings.modelDescription')}
             </Text>
 
             <View className="flex-row flex-wrap gap-2 mb-3">
@@ -306,7 +337,7 @@ export default function SettingsScreen() {
             activeOpacity={0.85}
           >
             <Text className="text-white dark:text-zinc-950 font-bold text-base">
-              حفظ الإعدادات
+              {t('settings.save')}
             </Text>
           </TouchableOpacity>
         </ScrollView>

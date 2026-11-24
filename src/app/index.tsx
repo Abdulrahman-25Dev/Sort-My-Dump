@@ -24,8 +24,10 @@ import { SkeletonLoader } from "../components/SkeletonLoader";
 import { AiResponse } from "../types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColorScheme } from "nativewind";
+import { useTranslation } from "react-i18next";
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AiResponse | null>(null);
@@ -74,7 +76,7 @@ export default function HomeScreen() {
 
       setText("");
     } catch (error: any) {
-      Alert.alert("عذراً", error.message);
+      Alert.alert(t("alerts.error"), error.message);
     } finally {
       setLoading(false);
     }
@@ -121,7 +123,7 @@ export default function HomeScreen() {
           <View className="flex-row items-center justify-between mb-6 mt-1 px-2">
             <View className="items-end">
               <Text className="text-xl font-extrabold text-primary-light dark:text-primary-dark">
-                رتب أفكاري
+                {t("home.title")}
               </Text>
             </View>
 
@@ -130,7 +132,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   onPress={handleResetSession}
                   className="p-2.5 rounded-xl bg-surface-light dark:bg-surface-dark"
-                  accessibilityLabel="جلسة جديدة"
+                  accessibilityLabel={t("home.newSession")}
                 >
                   <Plus size={20} color={headerIconColor} strokeWidth={2} />
                 </TouchableOpacity>
@@ -138,7 +140,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 onPress={() => router.push("/History")}
                 className="p-2.5 rounded-xl bg-surface-light dark:bg-surface-dark"
-                accessibilityLabel="السجل"
+                accessibilityLabel={t("home.history")}
               >
                 <HistoryIcon
                   size={19}
@@ -149,7 +151,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 onPress={() => router.push("/settings")}
                 className="p-2.5 rounded-xl bg-surface-light dark:bg-surface-dark"
-                accessibilityLabel="الإعدادات"
+                accessibilityLabel={t("home.settings")}
               >
                 <Settings
                   size={19}
@@ -165,7 +167,7 @@ export default function HomeScreen() {
             <TextInput
               className="p-5 text-right min-h-[150px] text-zinc-800 dark:text-zinc-100 text-base leading-6"
               multiline
-              placeholder="أفرغ ما في ذهنك هنا... أفكار، مشاريع، تساؤلات، خواطر بدون ترتيب"
+              placeholder={t("home.placeholder")}
               placeholderTextColor="#8da398"
               value={text}
               onChangeText={setText}
@@ -177,13 +179,13 @@ export default function HomeScreen() {
               <View className="flex-row-reverse items-center gap-3">
                 <Text className="text-xs text-zinc-500 dark:text-zinc-400">
                   {text.trim().length > 0
-                    ? `${text.trim().length} حرف`
-                    : "جاهز للتفريغ"}
+                    ? t("home.characterCount", { count: text.trim().length })
+                    : t("home.ready")}
                 </Text>
                 {text.length > 0 && !loading && (
                   <TouchableOpacity onPress={() => setText("")}>
                     <Text className="text-xs text-rose-600 dark:text-rose-400 font-medium">
-                      مسح
+                      {t("home.clear")}
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -209,7 +211,7 @@ export default function HomeScreen() {
                     <Text
                       className={`font-semibold text-sm ${analyzeContentTextClass}`}
                     >
-                      يرتّب...
+                      {t("home.loading")}
                     </Text>
                   </>
                 ) : (
@@ -223,7 +225,7 @@ export default function HomeScreen() {
                     <Text
                       className={`font-semibold text-sm pr-2 ${analyzeContentTextClass}`}
                     >
-                      رتّب أفكاري
+                      {t("home.analyze")}
                     </Text>
                   </>
                 )}
@@ -235,13 +237,13 @@ export default function HomeScreen() {
           {!result && !text && !loading && (
             <View className="mt-7">
               <Text className=" text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
-                أو جرّب تفريغاً سريعاً :
+                {t("home.examplesTitle")}
               </Text>
               <View className="gap-2.5">
                 {[
-                  "أحتاج أرتب غرفتي وأغسل الملابس، وكمان لازم أشتري هدية لصديقي بمناسبة تخرجه، وموعد الدكتور يوم الأحد",
-                  "فكرة مشروع صغير لبيع القهوة المختصة، وأبغى أتعلم الطبخ، ولازم أدفع فاتورة الكهرباء قبل نهاية الأسبوع",
-                  "أفكر أسافر إسطنبول في الإجازة، وأحتاج أجدد جواز السفر، وأبحث عن كورس إنجليزي أونلاين",
+                  t("home.sample1"),
+                  t("home.sample2"),
+                  t("home.sample3"),
                 ].map((sample, idx) => (
                   <TouchableOpacity
                     key={idx}

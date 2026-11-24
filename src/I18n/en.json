@@ -1,0 +1,84 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "deleteAll": "Delete all",
+    "ok": "OK",
+    "clear": "Clear"
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close settings",
+    "language": "Language",
+    "languageDescription": "Choose the app language",
+    "arabic": "Arabic",
+    "english": "English",
+    "darkMode": "Dark mode",
+    "darkModeEnabled": "On (easy on the eyes at night)",
+    "dayMode": "Calm daytime mode",
+    "devEnvironment": "Development environment (local Ollama)",
+    "devConnection": "Connected through your local device",
+    "laptopIp": "Laptop IP (port 11434)",
+    "ipDescription": "Make sure your phone and laptop are on the same network and Ollama listens on 0.0.0.0",
+    "openRouterKey": "OpenRouter key for production",
+    "apiDescription": "Enter your API key (usually starts with sk-or-v1-) to run analysis in production",
+    "hideKey": "Hide key",
+    "showKey": "Show key",
+    "modelName": "Model name (Model ID)",
+    "default": "Default",
+    "modelDescription": "Choose a fast model or enter a model name manually (leave blank for the default)",
+    "save": "Save settings",
+    "alertTitle": "Notice",
+    "enterIp": "Enter the laptop IP to connect to Ollama.",
+    "enterApiKey": "Enter an OpenRouter key for production.",
+    "savedTitle": "Saved",
+    "savedMessage": "Settings updated successfully"
+  },
+  "home": {
+    "title": "Sort my thoughts",
+    "newSession": "New session",
+    "history": "History",
+    "settings": "Settings",
+    "placeholder": "Clear your mind here... thoughts, projects, questions, and ideas, in any order",
+    "characterCount": "{{count}} characters",
+    "ready": "Ready to brain dump",
+    "clear": "Clear",
+    "loading": "Sorting...",
+    "analyze": "Sort my thoughts",
+    "examplesTitle": "Or try a quick brain dump:",
+    "sample1": "I need to tidy my room and do the laundry, buy a graduation gift for my friend, and remember my doctor's appointment on Sunday",
+    "sample2": "I have an idea for a small specialty coffee business, want to learn cooking, and need to pay the electricity bill before the end of the week",
+    "sample3": "I'm thinking of traveling to Istanbul during vacation, renewing my passport, and finding an online English course"
+  },
+  "history": {
+    "title": "Previous sessions",
+    "details": "Session details",
+    "backToSessions": "Back to sessions",
+    "back": "Back",
+    "deleteAll": "Delete all sessions",
+    "emptyTitle": "No saved sessions yet.",
+    "emptyDescription": "Anything you sort on the home screen will be saved here",
+    "progress": "{{doneIdeas}}/{{totalIdeas}} completed • {{categoryCount}} groups",
+    "deleteTitle": "Delete history?",
+    "deleteMessage": "All saved sessions will be permanently deleted. This cannot be undone."
+  },
+  "idea": {
+    "task": "Task",
+    "thought": "Idea",
+    "priority": {
+      "urgent": "Urgent",
+      "important": "Important",
+      "later": "Later"
+    },
+    "effort": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "alerts": {
+    "error": "Sorry"
+  },
+  "splash": {
+    "subtitle": "Sort your thoughts, with clarity"
+  }
+}

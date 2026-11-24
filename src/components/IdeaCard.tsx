@@ -1,12 +1,24 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Idea } from '../types';
+import { Effort, Idea, Priority } from '../types';
 import { Lightbulb } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
+import { useTranslation } from 'react-i18next';
 
 export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void }) {
   const isTask = idea.type === 'task';
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
   const ideaIconColor = colorScheme === 'dark' ? '#8BB8A1' : '#2F5242';
+  const priorityLabels: Record<Priority, string> = {
+    'عاجل': t('idea.priority.urgent'),
+    'مهم': t('idea.priority.important'),
+    'لاحقاً': t('idea.priority.later'),
+  };
+  const effortLabels: Record<Effort, string> = {
+    'سهل': t('idea.effort.easy'),
+    'متوسط': t('idea.effort.medium'),
+    'صعب': t('idea.effort.hard'),
+  };
 
   return (
     <TouchableOpacity 
@@ -53,7 +65,7 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
           {/* شارة النوع (مهمة أو فكرة) */}
           <View className={`px-2 py-1 rounded-md mr-2 ${isTask ? 'bg-teal-100 dark:bg-teal-900/40' : 'bg-sky-100 dark:bg-sky-900/40'}`}>
             <Text className={`text-[10px] font-bold ${isTask ? 'text-teal-700 dark:text-teal-300' : 'text-sky-700 dark:text-sky-300'}`}>
-              {isTask ? 'مهمة' : 'فكرة'}
+              {isTask ? t('idea.task') : t('idea.thought')}
             </Text>
           </View>
 
@@ -68,14 +80,14 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
               idea.priority === 'مهم' ? 'text-amber-700 dark:text-amber-300' :
               'text-slate-600 dark:text-slate-300'
             }`}>
-              {idea.priority}
+              {priorityLabels[idea.priority]}
             </Text>
           </View>
 
           {/* شارة الجهد */}
           <View className="bg-indigo-100 dark:bg-indigo-900/40 px-2 py-1 rounded-md">
             <Text className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300">
-              {idea.estimatedEffort}
+              {effortLabels[idea.estimatedEffort]}
             </Text>
           </View>
 

@@ -7,21 +7,23 @@ import { useAppStore } from '../store/useAppStore';
 import { CategorySection } from '../components/CategorySection';
 import { Plan } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 export default function HistoryScreen() {
   const { history, toggleIdea, clearHistory, theme } = useAppStore();
+  const { t, i18n } = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   const iconColor = theme === 'dark' ? '#7AA891' : '#3D6352';
 
   const handleClearHistory = () => {
     Alert.alert(
-      'حذف السجل؟',
-      'سيتم حذف جميع الجلسات المحفوظة نهائياً ولا يمكن التراجع عن ذلك.',
+      t('history.deleteTitle'),
+      t('history.deleteMessage'),
       [
-        { text: 'إلغاء', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'حذف الكل',
+          text: t('common.deleteAll'),
           style: 'destructive',
           onPress: () => clearHistory(),
         },
@@ -68,16 +70,18 @@ export default function HistoryScreen() {
           <View className="flex-row items-center justify-between mb-6 mt-1">
             <View className="items-start">
               <Text className="text-2xl text-primary-light dark:text-primary-dark">
-                تفاصيل الجلسة
+                {t('history.details')}
               </Text>
               <Text className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                {new Date(selectedPlan.createdAt).toLocaleDateString('ar-SA')}
+                {new Date(selectedPlan.createdAt).toLocaleDateString(
+                  i18n.language === 'ar' ? 'ar-SA' : 'en-US'
+                )}
               </Text>
             </View>
             <TouchableOpacity
               onPress={() => setSelectedPlan(null)}
               className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark px-2 py-2 rounded-xl flex-row items-center"
-              accessibilityLabel="رجوع إلى قائمة الجلسات"
+              accessibilityLabel={t('history.backToSessions')}
             >
               <ArrowLeft size={24} color={iconColor} />
             </TouchableOpacity>
@@ -105,14 +109,14 @@ export default function HistoryScreen() {
       >
         <View className="flex-row items-center justify-between mb-6 mt-1">
           <Text className="text-2xl text-primary-light dark:text-primary-dark">
-            الجلسات السابقة
+            {t('history.title')}
           </Text>
           <View className="flex-row items-center">
             {history.length > 0 && (
               <TouchableOpacity
                 onPress={handleClearHistory}
                 className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 p-2.5 rounded-full mr-2"
-                accessibilityLabel="حذف جميع الجلسات"
+                accessibilityLabel={t('history.deleteAll')}
               >
                 <Ionicons name="trash-outline" size={20} color="#DC2626" />
               </TouchableOpacity>
@@ -120,7 +124,7 @@ export default function HistoryScreen() {
             <TouchableOpacity
               onPress={() => router.back()}
               className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark p-2.5 rounded-full"
-              accessibilityLabel="رجوع"
+              accessibilityLabel={t('history.back')}
             >
               <ArrowLeft size={20} color={iconColor} />
             </TouchableOpacity>
@@ -131,10 +135,10 @@ export default function HistoryScreen() {
           <View className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark rounded-2xl p-8 items-center mt-6">
             <Ionicons name="layers-outline" size={32} color={iconColor} />
             <Text className="text-center text-zinc-600 dark:text-zinc-300 font-semibold mt-3">
-              لا توجد جلسات محفوظة حتى الآن.
+              {t('history.emptyTitle')}
             </Text>
             <Text className="text-center text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-              أي نص ترتّبه في الشاشة الرئيسية سيُحفظ هنا
+              {t('history.emptyDescription')}
             </Text>
           </View>
         ) : (
@@ -158,10 +162,16 @@ export default function HistoryScreen() {
               >
                 <View className="flex-row-reverse items-center justify-between mb-2">
                   <Text className="text-xs text-zinc-500 dark:text-zinc-400">
-                    {new Date(plan.createdAt).toLocaleDateString('ar-SA')}
+                    {new Date(plan.createdAt).toLocaleDateString(
+                      i18n.language === 'ar' ? 'ar-SA' : 'en-US'
+                    )}
                   </Text>
                   <Text className="text-xs font-semibold text-primary-light dark:text-primary-dark">
-                    {doneIdeas}/{totalIdeas} مكتمل • {plan.data.categories.length} مجموعات
+                    {t('history.progress', {
+                      doneIdeas,
+                      totalIdeas,
+                      categoryCount: plan.data.categories.length,
+                    })}
                   </Text>
                 </View>
 

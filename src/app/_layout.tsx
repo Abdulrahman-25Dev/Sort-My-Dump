@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useColorScheme } from "nativewind";
 import { Stack } from "expo-router";
 import { useAppStore } from "../store/useAppStore";
+import i18n from "../I18n/i18next";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { CustomSplash } from "../components/CustomSplash";
@@ -16,6 +17,10 @@ export default function RootLayout() {
   useEffect(() => {
     setColorScheme(theme);
   }, [setColorScheme, theme]);
+
+  useEffect(() => {
+    void i18n.changeLanguage(useAppStore.getState().language);
+  }, []);
 
   return (
     <SafeAreaProvider>
