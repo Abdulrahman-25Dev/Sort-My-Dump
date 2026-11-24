@@ -10,6 +10,7 @@ interface AppState {
   modelName: string;
   theme: 'light' | 'dark';
   language: 'ar' | 'en';
+  isOnboardingCompleted: boolean;
   history: Plan[];
 
   // الدوال (Actions)
@@ -19,6 +20,7 @@ interface AppState {
   setModelName: (model: string) => void;
   setTheme: (theme: 'light' | 'dark') => void;
   setLanguage: (language: 'ar' | 'en') => void;
+  completeOnboarding: () => void;
   addPlan: (plan: Plan) => void;
   clearHistory: () => void;
   toggleIdea: (planId: string, catIdx: number, ideaIdx: number) => void;
@@ -32,6 +34,7 @@ export const useAppStore = create<AppState>((set) => ({
   modelName: StorageService.getModelName(), // سنضيف هذه الدالة في storage
   theme: StorageService.getTheme(),
   language: StorageService.getLanguage(),
+  isOnboardingCompleted: StorageService.getIsOnboardingCompleted(),
   history: StorageService.getHistory(),
 
   // الدوال
@@ -58,6 +61,10 @@ export const useAppStore = create<AppState>((set) => ({
   setLanguage: (language) => {
     StorageService.setLanguage(language);
     set({ language });
+  },
+  completeOnboarding: () => {
+    StorageService.setOnboardingCompleted(true);
+    set({ isOnboardingCompleted: true });
   },
   addPlan: (plan) => {
     StorageService.savePlan(plan);

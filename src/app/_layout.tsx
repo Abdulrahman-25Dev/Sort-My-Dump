@@ -2,7 +2,7 @@
 import "./global.css";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "nativewind";
-import { Stack } from "expo-router";
+import { router, Stack, usePathname } from "expo-router";
 import { useAppStore } from "../store/useAppStore";
 import i18n from "../I18n/i18next";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -10,9 +10,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { CustomSplash } from "../components/CustomSplash";
 
 export default function RootLayout() {
-  const { theme } = useAppStore();
+  const { theme, isOnboardingCompleted } = useAppStore();
   const { setColorScheme } = useColorScheme();
   const [isReady, setIsReady] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setColorScheme(theme);
@@ -21,6 +22,17 @@ export default function RootLayout() {
   useEffect(() => {
     void i18n.changeLanguage(useAppStore.getState().language);
   }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    const isOnboardingRoute = pathname.startsWith("/onboarding");
+    if (!isOnboardingCompleted && !isOnboardingRoute) {
+      router.replace("/onboarding");
+    } else if (isOnboardingCompleted && isOnboardingRoute) {
+      router.replace("/");
+    }
+  }, [isOnboardingCompleted, isReady, pathname]);
 
   return (
     <SafeAreaProvider>
@@ -40,6 +52,8 @@ export default function RootLayout() {
             <Stack.Screen name="index" />
             <Stack.Screen name="settings" />
             <Stack.Screen name="History" />
+            <Stack.Screen name="onboarding/index" />
+            <Stack.Screen name="onboarding/setup" />
           </Stack>
         )}
       </GestureHandlerRootView>

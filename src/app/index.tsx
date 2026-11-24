@@ -48,8 +48,15 @@ export default function HomeScreen() {
   const analyzeContentTextClass =
     analyzeContentColor === "black" ? "text-black" : "text-white";
 
-  const { environment, apiKey, localIp, modelName, addPlan, toggleIdea } =
-    useAppStore();
+  const {
+    environment,
+    apiKey,
+    localIp,
+    modelName,
+    language,
+    addPlan,
+    toggleIdea,
+  } = useAppStore();
 
   const handleAnalyze = async () => {
     if (!text.trim()) return;
@@ -62,6 +69,7 @@ export default function HomeScreen() {
         apiKey,
         localIp,
         modelName,
+        language,
       });
 
       const planId = Date.now().toString();

@@ -5,6 +5,25 @@
     "ok": "OK",
     "clear": "Clear"
   },
+  "onboarding": {
+    "welcomeTitle": "A clearer way to think",
+    "welcomeDescription": "BrainSort turns the thoughts crowding your mind into organized, actionable steps.",
+    "organize": "Collect thoughts and notes in one place",
+    "prioritize": "Turn them into clear, prioritized tasks",
+    "focus": "Focus on the next step without distractions",
+    "getStarted": "Get started",
+    "tagline": "A calmer space for a clearer mind",
+    "setupTitle": "Set up your key",
+    "setupDescription": "Enter your OpenRouter key to start organizing your thoughts with AI.",
+    "keyLabel": "OpenRouter key",
+    "keyPrivacy": "Your key is stored only on this device and used to send analysis requests to OpenRouter.",
+    "saveAndStart": "Save and get started",
+    "alertTitle": "Key required",
+    "enterKey": "Enter your OpenRouter key to continue.",
+    "back": "Go back",
+    "showKey": "Show key",
+    "hideKey": "Hide key"
+  },
   "settings": {
     "title": "Settings",
     "close": "Close settings",

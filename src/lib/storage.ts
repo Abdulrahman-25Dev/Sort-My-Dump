@@ -10,6 +10,7 @@ const KEYS = {
   MODEL_NAME: 'ai_model_name', // تمت إضافته
   THEME: 'app_theme',
   LANGUAGE: 'app_language',
+  ONBOARDING_COMPLETED: 'onboarding_completed',
   HISTORY: 'plans_history',
 };
 
@@ -56,6 +57,13 @@ export const StorageService = {
   },
   setLanguage: (language: 'ar' | 'en') => {
     storage.set(KEYS.LANGUAGE, language);
+  },
+
+  getIsOnboardingCompleted: (): boolean => {
+    return storage.getBoolean(KEYS.ONBOARDING_COMPLETED) ?? false;
+  },
+  setOnboardingCompleted: (completed: boolean) => {
+    storage.set(KEYS.ONBOARDING_COMPLETED, completed);
   },
 
   // ---------- سجل الخطط ----------

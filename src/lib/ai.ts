@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { AiResponseSchema } from "./schema";
-import { SYSTEM_PROMPT, USER_PROMPT_PREFIX } from "./prompt";
+import { getSystemPrompt, getUserPromptPrefix } from "./prompt";
 import { AiResponse } from "../types";
 
 // تعريف الإعدادات التي سيستقبلها الملف من الواجهة
@@ -9,6 +9,7 @@ interface AiConfig {
   apiKey: string;
   localIp: string;
   modelName: string;
+  language: "ar" | "en";
 }
 
 export async function analyzeBrainDump(
@@ -40,8 +41,8 @@ export async function analyzeBrainDump(
   const payload = {
     model: finalModel,
     messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: USER_PROMPT_PREFIX + text },
+      { role: "system", content: getSystemPrompt(config.language) },
+      { role: "user", content: getUserPromptPrefix(config.language) + text },
     ],
     response_format: { type: "json_object" }, // إجبار النموذج على إرجاع JSON
     temperature: 0.1, // تقليل العشوائية
@@ -54,7 +55,15 @@ export async function analyzeBrainDump(
       timeout: 60000,
     }); // 60 ثانية لأن النماذج المحلية قد تتأخر
 
-    const rawContent = response.data.choices[0].message.content;
+    const message = response.data?.choices?.[0]?.message;
+    const rawContent = message?.content;
+    if (typeof rawContent !== "string" || !rawContent.trim()) {
+      const detail =
+        response.data?.error?.message ??
+        message?.refusal ??
+        "أعاد النموذج استجابة فارغة. تحقق من توفر النموذج وإعداداته في OpenRouter.";
+      throw new Error(detail);
+    }
 
     // تنظيف النص من أي علامات Markdown قد يضيفها النموذج بالخطأ (مثل ```json)
     // استخراج كائن JSON من أول قوس مفتوح إلى آخر قوس مغلق
@@ -62,7 +71,12 @@ export async function analyzeBrainDump(
     const cleanedContent = jsonMatch ? jsonMatch[0] : rawContent.trim();
 
     // تحويل النص إلى كائن JSON
-    const jsonResponse = JSON.parse(cleanedContent);
+    let jsonResponse: unknown;
+    try {
+      jsonResponse = JSON.parse(cleanedContent);
+    } catch {
+      throw new Error("أعاد النموذج نتيجة بتنسيق غير صالح. جرّب نموذجًا آخر.");
+    }
 
     // التحقق من أن الـ JSON يطابق المخطط (Schema)
     const validatedData = AiResponseSchema.parse(jsonResponse);
@@ -80,14 +94,29 @@ export async function analyzeBrainDump(
     };
 
     return finalData;
-  } catch (error: any) {
-    if (error.response?.status === 402) {
+  } catch (error: unknown) {
+    if (!(error instanceof Error) || !isAxiosError(error)) {
+      throw error;
+    }
+
+    const status = error.response?.status;
+    const providerMessage =
+      error.response?.data?.error?.message ??
+      error.response?.data?.message;
+
+    if (status === 401 || status === 403) {
+      throw new Error(
+        "رفض OpenRouter المفتاح. تأكد من صحة المفتاح وأنه مفعّل في حسابك.",
+      );
+    }
+
+    if (status === 402) {
       throw new Error(
         "رصيدك في OpenRouter غير كافٍ. يرجى شحن الرصيد من موقع OpenRouter.",
       );
     }
 
-    if (error.response?.status === 429) {
+    if (status === 429) {
       if (retries > 0) {
         console.warn("AI request rate-limited, retrying once...");
         return analyzeBrainDump(text, config, 0);
@@ -98,17 +127,17 @@ export async function analyzeBrainDump(
       );
     }
 
-    // إذا فشل الاتصال أو كان الـ JSON غير صالح، نعيد المحاولة
-    if (retries > 0) {
+    if (retries > 0 && (!status || status >= 500)) {
       console.warn(`AI request failed, retrying... (${retries} left)`);
       return analyzeBrainDump(text, config, retries - 1);
     }
 
-    // إذا انتهت المحاولات، نرمي رسالة خطأ مفهومة للمستخدم
-    console.error("AI Error:", error.response?.data || error.message);
+    console.error("AI request failed:", providerMessage || error.message);
     throw new Error(
-      error.response?.data?.error?.message ||
-        "فشل في تحليل النص. تأكد من اتصالك بالشبكة أو صحة المفتاح.",
+      providerMessage ||
+        (status
+          ? `فشل طلب OpenRouter (HTTP ${status}). تحقق من إعدادات المفتاح والنموذج.`
+          : "تعذّر الاتصال بخدمة الذكاء الاصطناعي. تحقق من اتصالك بالإنترنت."),
     );
   }
 }

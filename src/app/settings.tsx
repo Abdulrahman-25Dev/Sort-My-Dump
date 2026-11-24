@@ -19,8 +19,8 @@ import i18n from '../I18n/i18next';
 
 const DEV_MODELS = ['qwen2.5:3b', 'qwen2.5:7b', 'llama3.2:3b'];
 const PROD_MODELS = [
-  'qwen/qwen-2.5-72b-instruct:free',
   'meta-llama/llama-3.2-3b-instruct:free',
+  'qwen/qwen-2.5-72b-instruct:free',
 ];
 
 export default function SettingsScreen() {
@@ -321,7 +321,7 @@ export default function SettingsScreen() {
               placeholder={
                 environment === 'dev'
                   ? 'qwen2.5:3b'
-                  : 'qwen/qwen-2.5-72b-instruct:free'
+                  : 'meta-llama/llama-3.2-3b-instruct:free'
               }
               placeholderTextColor="#8da398"
               selectionColor={switchActiveColor}
