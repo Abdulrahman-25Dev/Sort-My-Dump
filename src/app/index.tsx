@@ -25,6 +25,7 @@ import { AiResponse } from "../types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColorScheme } from "nativewind";
 import { useTranslation } from "react-i18next";
+import i18n from "../I18n/i18next";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -120,7 +121,7 @@ export default function HomeScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {/* ترويسة عصرية ومختلفة */}
-          <View className="flex-row items-center justify-between mb-6 mt-1 px-2">
+          <View className={` items-center justify-between mb-6 mt-1 px-2 ${i18n.language === "ar" ? "flex-row" : "flex-row-reverse"}`}>
             <View className="items-end">
               <Text className="text-xl font-extrabold text-primary-light dark:text-primary-dark">
                 {t("home.title")}
@@ -165,7 +166,7 @@ export default function HomeScreen() {
           {/* بطاقة التفريغ الموحدة */}
           <View className="bg-card-light dark:bg-card-dark rounded-3xl border border-surface-light dark:border-surface-dark shadow-sm overflow-hidden">
             <TextInput
-              className="p-5 text-right min-h-[150px] text-zinc-800 dark:text-zinc-100 text-base leading-6"
+              className="p-5 min-h-[150px] text-zinc-800 dark:text-zinc-100 text-base leading-6"
               multiline
               placeholder={t("home.placeholder")}
               placeholderTextColor="#8da398"
@@ -175,7 +176,7 @@ export default function HomeScreen() {
             />
 
             {/* شريط الإجراءات السفلي المدمج داخل البطاقة */}
-            <View className="flex-row-reverse items-center justify-between px-4 py-3 bg-bg-light/70 dark:bg-bg-dark/60 border-t border-surface-light dark:border-surface-dark">
+            <View className={`${i18n.language === "ar" ? "flex-row" : "flex-row-reverse"} items-center justify-between px-4 py-3 bg-bg-light/70 dark:bg-bg-dark/60 border-t border-surface-light dark:border-surface-dark`}>
               <View className="flex-row-reverse items-center gap-3">
                 <Text className="text-xs text-zinc-500 dark:text-zinc-400">
                   {text.trim().length > 0
@@ -236,7 +237,7 @@ export default function HomeScreen() {
           {/* حالة البداية: أمثلة سريعة قابلة للنقر للتجربة الفورية */}
           {!result && !text && !loading && (
             <View className="mt-7">
-              <Text className=" text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-3">
+              <Text className={`${i18n.language === "ar" ? "text-left" : "text-right"} text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-3`}>
                 {t("home.examplesTitle")}
               </Text>
               <View className="gap-2.5">
@@ -251,7 +252,7 @@ export default function HomeScreen() {
                     className="bg-card-light/80 dark:bg-card-dark/80 border border-surface-light dark:border-surface-dark rounded-2xl p-3.5"
                     activeOpacity={0.7}
                   >
-                    <Text className="text text-xs text-zinc-700 dark:text-zinc-300 leading-5">
+                    <Text className={`${i18n.language === "ar" ? "text-left" : "text-right"} text text-xs text-zinc-700 dark:text-zinc-300 leading-5`}>
                       {sample}
                     </Text>
                   </TouchableOpacity>

@@ -8,6 +8,7 @@ import { CategorySection } from '../components/CategorySection';
 import { Plan } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import i18n from '../I18n/i18next';
 
 export default function HistoryScreen() {
   const { history, toggleIdea, clearHistory, theme } = useAppStore();
@@ -67,7 +68,7 @@ export default function HistoryScreen() {
           contentContainerStyle={{ paddingBottom: 48 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center justify-between mb-6 mt-1">
+          <View className="flex-row- items-center justify-between mb-6 mt-1">
             <View className="items-start">
               <Text className="text-2xl text-primary-light dark:text-primary-dark">
                 {t('history.details')}
