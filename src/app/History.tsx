@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Alert, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight } from 'lucide-react-native';
 import { useAppStore } from '../store/useAppStore';
 import { CategorySection } from '../components/CategorySection';
 import { Plan } from '../types';
@@ -68,8 +68,8 @@ export default function HistoryScreen() {
           contentContainerStyle={{ paddingBottom: 48 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row- items-center justify-between mb-6 mt-1">
-            <View className="items-start">
+          <View className={` ${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between mb-6 mt-1`}>
+            <View className={` ${i18n.language === 'ar' ? 'items-start' : 'items-end'}`}>
               <Text className="text-2xl text-primary-light dark:text-primary-dark">
                 {t('history.details')}
               </Text>
@@ -84,7 +84,11 @@ export default function HistoryScreen() {
               className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark px-2 py-2 rounded-xl flex-row items-center"
               accessibilityLabel={t('history.backToSessions')}
             >
-              <ArrowLeft size={24} color={iconColor} />
+              {i18n.language === 'ar' ? (
+                <ArrowLeft size={20} color={iconColor} />
+              ) : (
+                <ArrowRight size={20} color={iconColor} className="rotate-180" />
+              )}
             </TouchableOpacity>
           </View>
 
@@ -108,11 +112,11 @@ export default function HistoryScreen() {
         contentContainerStyle={{ paddingBottom: 48 }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="flex-row items-center justify-between mb-6 mt-1">
+        <View className={` ${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} justify-between mb-6 mt-1`}>
           <Text className="text-2xl text-primary-light dark:text-primary-dark">
             {t('history.title')}
           </Text>
-          <View className="flex-row items-center">
+          <View className={` ${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center gap-2`}>
             {history.length > 0 && (
               <TouchableOpacity
                 onPress={handleClearHistory}
@@ -127,7 +131,11 @@ export default function HistoryScreen() {
               className="bg-card-light dark:bg-card-dark border border-surface-light dark:border-surface-dark p-2.5 rounded-full"
               accessibilityLabel={t('history.back')}
             >
-              <ArrowLeft size={20} color={iconColor} />
+              {i18n.language === 'ar' ? (
+                <ArrowLeft size={20} color={iconColor} />
+              ) : (
+                <ArrowRight size={20} color={iconColor} className="rotate-180" />
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -161,7 +169,7 @@ export default function HistoryScreen() {
                 onPress={() => setSelectedPlan(plan)}
                 activeOpacity={0.75}
               >
-                <View className="flex-row-reverse items-center justify-between mb-2">
+                <View className={` ${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between mb-2`} style={{ direction: 'ltr' }}>
                   <Text className="text-xs text-zinc-500 dark:text-zinc-400">
                     {new Date(plan.createdAt).toLocaleDateString(
                       i18n.language === 'ar' ? 'ar-SA' : 'en-US'

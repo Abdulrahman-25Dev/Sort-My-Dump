@@ -3,6 +3,7 @@ import { Effort, Idea, Priority } from '../types';
 import { Lightbulb } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/I18n/i18next';
 
 export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void }) {
   const isTask = idea.type === 'task';
@@ -22,7 +23,7 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
 
   return (
     <TouchableOpacity 
-      className={`flex-row items-start p-4 mb-3 rounded-2xl border ${
+      className={`${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} p-4 mb-3 rounded-2xl border ${
         idea.isDone
           ? 'bg-bg-light dark:bg-bg-dark border-surface-light dark:border-surface-dark'
           : 'bg-card-light dark:bg-card-dark border-surface-light dark:border-surface-dark shadow-sm'
@@ -42,10 +43,10 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
         </View>
       )}
 
-      <View className="flex-1 items-end" style={{ direction: 'ltr' }}>
+      <View className={`flex-1 ${i18n.language === 'ar' ? 'items-end' : 'items-start'}`} style={{ direction: 'ltr' }}>
         {/* عنوان الفكرة */}
         <Text
-          className={`w-full text-right font-bold text-base mb-1 ${idea.isDone ? 'line-through text-primary-light/50 dark:text-primary-dark/50' : 'text-primary-light dark:text-primary-dark'}`}
+        className={`w-full ${i18n.language === 'ar' ? 'text-right' : 'text-left'} font-bold text-base mb-1 ${idea.isDone ? 'line-through text-primary-light/50 dark:text-primary-dark/50' : 'text-primary-light dark:text-primary-dark'}`}
           style={{ writingDirection: 'rtl' }}
         >
           {idea.title}
@@ -53,14 +54,14 @@ export function IdeaCard({ idea, onToggle }: { idea: Idea, onToggle: () => void 
         
         {/* الخطوة التالية */}
         <Text
-          className={`w-full text-right text-sm mb-3 ${idea.isDone ? 'text-primary-light/40 dark:text-primary-dark/40' : 'text-primary-light/80 dark:text-primary-dark/80'}`}
+          className={`w-full ${i18n.language === 'ar' ? 'text-right' : 'text-left'} text-sm mb-3 ${idea.isDone ? 'text-primary-light/40 dark:text-primary-dark/40' : 'text-primary-light/80 dark:text-primary-dark/80'}`}
           style={{ writingDirection: 'rtl' }}
         >
           {idea.nextStep}
         </Text>
 
         {/* الأولويات والنوع */}
-        <View className="flex-row flex-wrap justify-end" style={{ direction: 'ltr' }}>
+        <View className={` ${i18n.language === 'ar' ? 'flex-row' : 'flex-row-reverse'} flex-wrap justify-end`} style={{ direction: 'ltr' }}>
           
           {/* شارة النوع (مهمة أو فكرة) */}
           <View className={`px-2 py-1 rounded-md mr-2 ${isTask ? 'bg-teal-100 dark:bg-teal-900/40' : 'bg-sky-100 dark:bg-sky-900/40'}`}>
