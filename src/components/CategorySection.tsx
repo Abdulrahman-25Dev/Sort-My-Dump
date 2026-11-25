@@ -1,6 +1,7 @@
-import { View, Text } from 'react-native';
-import { Category, Idea } from '../types';
-import { IdeaCard } from './IdeaCard';
+import { View, Text } from "react-native";
+import { Category, Idea } from "../types";
+import { IdeaCard } from "./IdeaCard";
+import i18n from "../I18n/i18next";
 
 interface Props {
   category: Category;
@@ -12,10 +13,17 @@ export function CategorySection({ category, onToggleIdea }: Props) {
     <View className="mb-6">
       {/* رأس التصنيف مع عدّاد خفيف */}
       <View
-        className="flex-row-reverse items-center justify-between mb-3 px-0.5"
-        style={{ direction: 'ltr' }}
+        className={` ${
+          i18n.language === "ar" ? "flex-row-reverse" : "flex-row"
+        } items-center justify-between mb-3 px-1.5`}
+        style={{ direction: "ltr" }}
       >
-        <View className="flex-row-reverse items-center" style={{ direction: 'ltr' }}>
+        <View
+          className={`${
+            i18n.language === "ar" ? "flex-row-reverse" : "flex-row"
+          } items-center gap-2`}
+          style={{ direction: "ltr" }}
+        >
           <View className="w-1.5 h-4 bg-indigo-500 rounded-full ml-2" />
           <Text className="text-base font-bold text-zinc-900 dark:text-zinc-100">
             {category.categoryName}

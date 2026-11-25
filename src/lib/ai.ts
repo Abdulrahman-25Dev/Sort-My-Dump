@@ -24,11 +24,11 @@ export async function analyzeBrainDump(
   // 1. تحديد المسار (تطوير أم إنتاج)
   if (config.environment === "dev") {
     url = `http://${config.localIp}:11434/v1/chat/completions`;
-    finalModel = config.modelName || "qwen2.5:3b";
+    finalModel = config.modelName || "openrouter/free";
     headers = { "Content-Type": "application/json" };
   } else {
     url = "https://openrouter.ai/api/v1/chat/completions";
-    finalModel = config.modelName || "meta-llama/llama-3.2-3b-instruct:free";
+    finalModel = config.modelName || "openrouter/free";
     headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.apiKey}`,
@@ -101,8 +101,7 @@ export async function analyzeBrainDump(
 
     const status = error.response?.status;
     const providerMessage =
-      error.response?.data?.error?.message ??
-      error.response?.data?.message;
+      error.response?.data?.error?.message ?? error.response?.data?.message;
 
     if (status === 401 || status === 403) {
       throw new Error(

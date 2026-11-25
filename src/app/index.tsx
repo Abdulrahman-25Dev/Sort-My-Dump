@@ -141,7 +141,7 @@ export default function HomeScreen() {
               </Text>
             </View>
 
-            <View className="flex-row items-center gap-2">
+            <View className={` items-center gap-2 ${i18n.language === "ar" ? "flex-row" : "flex-row-reverse"}`}>
               {result && (
                 <TouchableOpacity
                   onPress={handleResetSession}
