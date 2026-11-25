@@ -8,6 +8,7 @@ import i18n from "../I18n/i18next";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { CustomSplash } from "../components/CustomSplash";
+import { CustomAlertProvider } from "../components/CustomAlert";
 
 export default function RootLayout() {
   const { theme, isOnboardingCompleted } = useAppStore();
@@ -37,6 +38,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
+        <CustomAlertProvider>
         {/* شاشة البداية المخصصة تظهر فوق كل شيء حتى تنتهي */}
         {!isReady && <CustomSplash onFinish={() => setIsReady(true)} />}
         
@@ -56,6 +58,7 @@ export default function RootLayout() {
             <Stack.Screen name="onboarding/setup" />
           </Stack>
         )}
+        </CustomAlertProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

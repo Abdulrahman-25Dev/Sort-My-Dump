@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,11 +13,13 @@ import { ArrowLeft, ArrowRight, Eye, EyeOff, KeyRound, ShieldCheck } from "lucid
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppStore } from "../../store/useAppStore";
+import { useCustomAlert } from "../../components/CustomAlert";
 
 const DEFAULT_OPENROUTER_MODEL = "meta-llama/llama-3.2-3b-instruct:free";
 
 export default function OnboardingSetupScreen() {
   const { t } = useTranslation();
+  const { showAlert } = useCustomAlert();
   const {
     apiKey,
     setApiKey,
@@ -38,7 +39,11 @@ export default function OnboardingSetupScreen() {
   const handleSave = () => {
     const trimmedKey = key.trim();
     if (!trimmedKey) {
-      Alert.alert(t("onboarding.alertTitle"), t("onboarding.enterKey"));
+      showAlert({
+        title: t("onboarding.alertTitle"),
+        message: t("onboarding.enterKey"),
+        variant: "error",
+      });
       return;
     }
 

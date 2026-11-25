@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { ArrowLeft, ArrowRight } from 'lucide-react-native';
@@ -8,28 +8,30 @@ import { CategorySection } from '../components/CategorySection';
 import { Plan } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import i18n from '../I18n/i18next';
+import { useCustomAlert } from '../components/CustomAlert';
 
 export default function HistoryScreen() {
   const { history, toggleIdea, clearHistory, theme } = useAppStore();
   const { t, i18n } = useTranslation();
+  const { showAlert } = useCustomAlert();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   const iconColor = theme === 'dark' ? '#7AA891' : '#3D6352';
 
   const handleClearHistory = () => {
-    Alert.alert(
-      t('history.deleteTitle'),
-      t('history.deleteMessage'),
-      [
+    showAlert({
+      title: t('history.deleteTitle'),
+      message: t('history.deleteMessage'),
+      variant: 'destructive',
+      buttons: [
         { text: t('common.cancel'), style: 'cancel' },
         {
           text: t('common.deleteAll'),
           style: 'destructive',
           onPress: () => clearHistory(),
         },
-      ]
-    );
+      ],
+    });
   };
 
   const handleToggleInSession = (catIdx: number, ideaIdx: number) => {

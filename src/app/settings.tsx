@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   Switch,
-  Alert,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -16,6 +15,7 @@ import { useAppStore } from '../store/useAppStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import i18n from '../I18n/i18next';
+import { useCustomAlert } from '../components/CustomAlert';
 
 const DEV_MODELS = ['qwen2.5:3b', 'qwen2.5:7b', 'llama3.2:3b'];
 const PROD_MODELS = [
@@ -39,6 +39,7 @@ export default function SettingsScreen() {
     setLanguage,
   } = useAppStore();
   const { t } = useTranslation();
+  const { showAlert } = useCustomAlert();
 
   const [tempIp, setTempIp] = useState(localIp);
   const [tempKey, setTempKey] = useState(apiKey);
@@ -52,12 +53,20 @@ export default function SettingsScreen() {
     const trimmedModel = tempModel.trim();
 
     if (environment === 'dev' && !trimmedIp) {
-      Alert.alert(t('settings.alertTitle'), t('settings.enterIp'));
+      showAlert({
+        title: t('settings.alertTitle'),
+        message: t('settings.enterIp'),
+        variant: 'error',
+      });
       return;
     }
 
     if (environment === 'prod' && !trimmedKey) {
-      Alert.alert(t('settings.alertTitle'), t('settings.enterApiKey'));
+      showAlert({
+        title: t('settings.alertTitle'),
+        message: t('settings.enterApiKey'),
+        variant: 'error',
+      });
       return;
     }
 
@@ -65,9 +74,12 @@ export default function SettingsScreen() {
     setApiKey(trimmedKey);
     setModelName(trimmedModel);
 
-    Alert.alert(t('settings.savedTitle'), t('settings.savedMessage'), [
-      { text: t('common.ok'), onPress: () => router.back() },
-    ]);
+    showAlert({
+      title: t('settings.savedTitle'),
+      message: t('settings.savedMessage'),
+      variant: 'success',
+      buttons: [{ text: t('common.ok'), onPress: () => router.back() }],
+    });
   };
 
   const activePresets = environment === 'dev' ? DEV_MODELS : PROD_MODELS;

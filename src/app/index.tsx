@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -26,9 +25,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useColorScheme } from "nativewind";
 import { useTranslation } from "react-i18next";
 import i18n from "../I18n/i18next";
+import { useCustomAlert } from "../components/CustomAlert";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
+  const { showAlert } = useCustomAlert();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AiResponse | null>(null);
@@ -85,7 +86,11 @@ export default function HomeScreen() {
 
       setText("");
     } catch (error: any) {
-      Alert.alert(t("alerts.error"), error.message);
+      showAlert({
+        title: t("alerts.error"),
+        message: error instanceof Error ? error.message : String(error),
+        variant: "error",
+      });
     } finally {
       setLoading(false);
     }
