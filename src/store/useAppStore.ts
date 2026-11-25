@@ -13,6 +13,9 @@ interface AppState {
   isOnboardingCompleted: boolean;
   history: Plan[];
 
+  // مزامنة التخزين المحلي بعد التحميل
+  hydrate: () => void;
+
   // الدوال (Actions)
   setEnvironment: (env: 'dev' | 'prod') => void;
   setApiKey: (key: string) => void;
@@ -27,15 +30,32 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  // القيم الابتدائية (تُقرأ من التخزين عند فتح التطبيق)
-  environment: StorageService.getEnvironment(),
-  apiKey: StorageService.getApiKey(),
-  localIp: StorageService.getLocalIp(),
-  modelName: StorageService.getModelName(), // سنضيف هذه الدالة في storage
-  theme: StorageService.getTheme(),
-  language: StorageService.getLanguage(),
-  isOnboardingCompleted: StorageService.getIsOnboardingCompleted(),
-  history: StorageService.getHistory(),
+  // قيم افتراضية آمنة (لا تستدعي التخزين وقت تقييم السيرفر)
+  environment: 'prod',
+  apiKey: '',
+  localIp: '',
+  modelName: '',
+  theme: 'light',
+  language: 'ar',
+  isOnboardingCompleted: false,
+  history: [],
+
+  hydrate: () => {
+    try {
+      set({
+        environment: StorageService.getEnvironment(),
+        apiKey: StorageService.getApiKey(),
+        localIp: StorageService.getLocalIp(),
+        modelName: StorageService.getModelName(),
+        theme: StorageService.getTheme(),
+        language: StorageService.getLanguage(),
+        isOnboardingCompleted: StorageService.getIsOnboardingCompleted(),
+        history: StorageService.getHistory(),
+      });
+    } catch {
+      // تجاهل في حال عدم توفر التخزين في بيئة غير مدعومة
+    }
+  },
 
   // الدوال
   setEnvironment: (environment) => {
@@ -75,7 +95,6 @@ export const useAppStore = create<AppState>((set) => ({
     set({ history: [] });
   },
   toggleIdea: (planId, catIdx, ideaIdx) => {
-    // هنا نستدعي دالة التخزين التي تعدل الحالة، ثم نحدث الحالة العامة
     StorageService.toggleIdeaDone(planId, catIdx, ideaIdx);
     set({ history: StorageService.getHistory() });
   },
